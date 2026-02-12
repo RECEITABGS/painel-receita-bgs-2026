@@ -16,7 +16,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         table td, table th { padding: 6px 10px !important; line-height: 1.1; }
         
-        /* Ajuste de Simetria: Altura fixa para alinhar os totais */
         .table-container { min-height: 285px; display: flex; flex-direction: column; justify-content: space-between; }
         .row-total { background: #0f172a; color: white; font-weight: 800; text-transform: uppercase; font-size: 10px; }
     </style>
@@ -60,7 +59,7 @@
 
                 <div class="grid grid-cols-2 gap-4 flex-1 min-h-0">
                     <div class="bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden table-container">
-                        <div class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 uppercase tracking-wider italic text-center">Performance por LOB</div>
+                        <div class="bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 uppercase tracking-wider italic text-center">Performance por LOB</div>
                         <div class="flex-1 overflow-y-auto no-scrollbar">
                             <table class="w-full text-[11px]">
                                 <thead class="bg-slate-50 sticky top-0 text-[9px] text-slate-500 border-b">
@@ -182,7 +181,6 @@
                 </tr>`;
             };
 
-            // Render LOB
             document.getElementById('corpo-lob').innerHTML = m.tabelaLOB.map(i => {
                 const vr = i.real - i.fcst;
                 const vp = i.fcst !== 0 ? (vr / i.fcst) * 100 : 0;
@@ -190,7 +188,6 @@
             }).join('');
             document.getElementById('total-lob').innerHTML = criarLinhaTotal(tReal, tFcst, "TOTAL LOB");
 
-            // Render Gestor
             document.getElementById('corpo-gestor').innerHTML = m.tabelaGestor.map(i => {
                 const vr = i.real - i.fcst;
                 const vp = i.fcst !== 0 ? (vr / i.fcst) * 100 : 0;
@@ -198,7 +195,6 @@
             }).join('');
             document.getElementById('total-gestor').innerHTML = criarLinhaTotal(tReal, tFcst, "TOTAL GERAL");
 
-            // Share Ranking
             const rankedShare = [...m.tabelaLOB]
                 .sort((a, b) => b.real - a.real)
                 .map(i => {
@@ -207,7 +203,6 @@
                     return `<div class="share-box"><p class="text-[13px] font-black text-slate-700">${perc}%</p><p class="text-[8px] font-bold text-slate-400 uppercase truncate">${label}</p></div>`;
                 }).join('');
 
-            // KPIs
             document.getElementById('kpi-real').innerText = fmt(tReal);
             document.getElementById('kpi-fcst').innerText = fmt(tFcst);
             document.getElementById('kpi-var-r').innerText = (tReal-tFcst>=0?'+ ':'') + fmt(tReal-tFcst);
