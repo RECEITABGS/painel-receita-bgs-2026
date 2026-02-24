@@ -6,131 +6,127 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #f1f5f9; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
-        .main-container { height: 100vh; display: flex; flex-direction: column; padding: 0.75rem; gap: 0.75rem; }
-        .nav-btn { padding: 3px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; background: #cbd5e1; color: #475569; }
+        body { background: #f1f5f9; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; margin: 0; }
+        .main-layout { display: grid; grid-template-columns: 140px 1fr; height: 100vh; padding: 0.4rem; gap: 0.4rem; box-sizing: border-box; }
+        .sidebar-share { background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 0.3rem; height: 100%; overflow: hidden; }
+        .content-area { display: flex; flex-direction: column; gap: 0.4rem; height: 100%; min-height: 0; }
+        .panels-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; flex: 1; min-height: 0; overflow: hidden; }
+        .panel { background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; }
+        .table-wrapper { flex: 1; overflow-y: auto; position: relative; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th { background: #f8fafc; font-size: 8.5px; color: #64748b; text-transform: uppercase; padding: 6px 3px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
+        td { padding: 5px 6px; font-size: 10px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
+        .row-total { background: #0f172a; color: white; font-weight: 800; font-size: 11px; text-transform: uppercase; width: 100%; }
+        .row-total td { border: none; padding: 8px 6px; }
+        .nav-btn { padding: 3px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; background: #cbd5e1; color: #475569; cursor: pointer; }
         .nav-btn.active { background: #0f172a; color: white; }
-        .kpi-card { background: white; border-radius: 10px; padding: 0.6rem 1rem; border: 1px solid #e2e8f0; flex: 1; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .share-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 0.4rem; min-height: 42px; }
-        .share-item { background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 2px; text-align: center; }
-        .panel { background: white; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow: hidden; flex: 1; }
-        .panel-header { background: #1e293b; color: white; padding: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; text-align: center; }
-        table { width: 100%; table-layout: fixed; border-collapse: collapse; }
-        th { background: #f8fafc; font-size: 8px; color: #64748b; text-transform: uppercase; padding: 6px 4px; border-bottom: 1px solid #e2e8f0; }
-        td { padding: 5px 4px; font-size: 9.5px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .row-total { background: #0f172a; color: white; font-weight: 800; }
-        .row-total td { border: none; padding: 8px 4px; font-size: 10px; }
-        .v-pos { color: #10b981; font-weight: 600; }
-        .v-neg { color: #ef4444; font-weight: 600; }
-        
-        /* Ajuste de nitidez para o Logo */
-        .logo-container { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
-        .logo-brinks { height: 22px; width: auto; object-fit: contain; }
-        .logo-subtitle { color: #005596; font-size: 11px; font-weight: 600; margin-top: 2px; letter-spacing: -0.2px; }
+        .kpi-card { background: white; border-radius: 6px; padding: 0.6rem; border: 1px solid #e2e8f0; border-left-width: 3px; flex: 1; }
+        .logo-img { height: 44px; width: auto; } /* Tamanho ajustado para igualar ao box do mês */
+        .share-item { padding: 4px 6px; border-radius: 4px; border: 1px solid #f1f5f9; background: #fcfcfc; margin-bottom: 2px; }
+        .empty-state { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.95); z-index: 20; text-align: center; padding: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div id="modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden">
-            <div class="bg-slate-900 text-white p-3 flex justify-between items-center">
-                <h3 class="font-black italic uppercase text-xs" id="m-titulo">TOP CLIENTES</h3>
-                <button onclick="fecharModal()" class="bg-red-500 px-3 py-1 rounded text-[10px] font-bold uppercase hover:bg-red-600 transition-colors">Fechar X</button>
+            <div class="bg-slate-900 text-white p-2 flex justify-between items-center">
+                <h3 class="font-black italic uppercase text-[12px]" id="m-titulo">TOP CLIENTES</h3>
+                <button onclick="fecharModal()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-[10px] font-bold">FECHAR X</button>
             </div>
-            <div class="p-4">
+            <div class="p-3">
                 <table class="w-full">
-                    <thead>
-                        <tr class="text-slate-400 border-b text-[9px]">
-                            <th class="text-left py-2 w-[35%]">CLIENTE</th>
-                            <th class="text-right">REAL R$</th>
-                            <th class="text-right">FCST R$</th>
-                            <th class="text-right">VAR R$</th>
-                            <th class="text-right">VAR %</th>
-                            <th class="text-right">SHARE / GESTOR</th>
-                        </tr>
-                    </thead>
+                    <thead id="m-head"></thead>
                     <tbody id="m-lista"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="main-container">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <h1 class="text-xl font-black text-slate-900 italic uppercase tracking-tighter">Receita BGS - 2026</h1>
-                <nav class="flex gap-1" id="nav-meses"></nav>
-            </div>
-            <div class="flex items-center gap-6">
-                <div id="status-mes" class="bg-slate-900 text-white px-3 py-1 rounded font-black text-[10px] italic">JANEIRO</div>
-                <div class="logo-container">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Brink%27s_logo.svg/1200px-Brink%27s_logo.svg.png" alt="Brink's" class="logo-brinks">
-                    <span class="logo-subtitle">Global Services</span>
+    <div class="main-layout">
+        <aside class="sidebar-share">
+            <p class="text-[9px] font-black text-slate-400 uppercase text-center py-2 border-b bg-slate-50">Share LOB %</p>
+            <div id="share-bar" class="flex flex-col gap-1 p-1"></div>
+        </aside>
+
+        <main class="content-area">
+            <header class="flex items-center justify-between bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-xl font-black text-slate-900 italic uppercase tracking-tighter">Receita BGS</h1>
+                    <nav class="flex gap-1" id="nav-meses"></nav>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div id="status-mes" class="bg-slate-900 text-white px-4 py-2 rounded-md font-black text-[12px] tracking-widest uppercase flex items-center justify-center min-w-[100px]">JANEIRO</div>
+                    <img src="BRINKS.png" alt="Brink's" class="logo-img">
+                </div>
+            </header>
+
+            <div class="flex gap-2">
+                <div class="kpi-card border-l-slate-400">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase">Realizado</p>
+                    <p id="k-real" class="text-xl font-black text-slate-800">0</p>
+                </div>
+                <div class="kpi-card border-l-slate-400">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase">Forecast</p>
+                    <p id="k-fcst" class="text-xl font-black text-slate-800">0</p>
+                </div>
+                <div class="kpi-card border-l-emerald-500">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase">Var R$</p>
+                    <p id="k-vrs" class="text-xl font-black">0</p>
+                </div>
+                <div class="kpi-card border-l-emerald-500">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase">Var %</p>
+                    <p id="k-vpt" class="text-xl font-black">0%</p>
                 </div>
             </div>
-        </div>
 
-        <div class="flex gap-3">
-            <div class="kpi-card border-l-4 border-l-slate-400">
-                <p class="text-[8px] font-bold text-slate-400 uppercase">Realizado Mês</p>
-                <p id="k-real" class="text-xl font-black text-slate-800">0</p>
-            </div>
-            <div class="kpi-card border-l-4 border-l-slate-400">
-                <p class="text-[8px] font-bold text-slate-400 uppercase">Forecast Mês</p>
-                <p id="k-fcst" class="text-xl font-black text-slate-800">0</p>
-            </div>
-            <div class="kpi-card border-l-4 border-l-emerald-500">
-                <p class="text-[8px] font-bold text-slate-400 uppercase">Variação R$</p>
-                <p id="k-vrs" class="text-xl font-black text-emerald-600">0</p>
-            </div>
-            <div class="kpi-card border-l-4 border-l-emerald-500">
-                <p class="text-[8px] font-bold text-slate-400 uppercase">Variação %</p>
-                <p id="k-vpt" class="text-xl font-black text-emerald-600">0%</p>
-            </div>
-        </div>
-
-        <div id="share-bar" class="share-grid"></div>
-
-        <div class="flex gap-3 flex-1 min-h-0">
-            <div class="panel">
-                <div class="panel-header">Performance por LOB</div>
-                <div class="flex-1 overflow-hidden">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="text-left w-[30%]">LOB</th>
-                                <th class="text-right w-[18%]">Real</th>
-                                <th class="text-right w-[18%]">Fcst</th>
-                                <th class="text-right w-[20%]">Var R$</th>
-                                <th class="text-right w-[14%]">Var %</th>
-                            </tr>
-                        </thead>
-                        <tbody id="body-lob"></tbody>
-                    </table>
+            <div class="panels-container">
+                <div class="panel">
+                    <div class="bg-slate-800 text-white text-[11px] font-bold p-2 text-center uppercase tracking-wider">Performance por LOB</div>
+                    <div class="table-wrapper">
+                        <div id="alert-lob" class="empty-state hidden">
+                            <p class="text-slate-400 font-bold text-[10px] uppercase">DADOS DISPONÍVEIS APÓS O FECHAMENTO</p>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="text-left w-[35%]">LOB</th>
+                                    <th class="text-right">Real</th>
+                                    <th class="text-right">Fcst</th>
+                                    <th class="text-right">Var R$</th>
+                                    <th class="text-right">Var %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body-lob"></tbody>
+                        </table>
+                    </div>
+                    <table class="row-total"><tr id="footer-lob"></tr></table>
                 </div>
-                <table class="row-total"><tr id="footer-lob"></tr></table>
-            </div>
 
-            <div class="panel">
-                <div class="panel-header">Performance por Gestor</div>
-                <div class="flex-1 overflow-hidden">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="text-left w-[25%]">Gestor</th>
-                                <th class="text-right w-[16%]">Real</th>
-                                <th class="text-right w-[16%]">Fcst</th>
-                                <th class="text-right w-[18%]">Var R$</th>
-                                <th class="text-right w-[13%]">Var %</th>
-                                <th class="text-center w-[12%]">Top 5</th>
-                            </tr>
-                        </thead>
-                        <tbody id="body-gestor"></tbody>
-                    </table>
+                <div class="panel">
+                    <div class="bg-slate-800 text-white text-[11px] font-bold p-2 text-center uppercase tracking-wider">Performance por Gestor</div>
+                    <div class="table-wrapper">
+                        <div id="alert-gestor" class="empty-state hidden">
+                            <p class="text-slate-400 font-bold text-[10px] uppercase">DADOS DISPONÍVEIS APÓS O FECHAMENTO</p>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="text-left w-[30%]">Gestor</th>
+                                    <th class="text-right">Real</th>
+                                    <th class="text-right">Fcst</th>
+                                    <th class="text-right">Var R$</th>
+                                    <th class="text-right">Var %</th>
+                                    <th class="text-center w-[45px]">TOP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body-gestor"></tbody>
+                        </table>
+                    </div>
+                    <table class="row-total"><tr id="footer-gestor"></tr></table>
                 </div>
-                <table class="row-total"><tr id="footer-gestor"></tr></table>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
@@ -138,164 +134,106 @@
             "JANEIRO": {
                 real: 31297537, fcst: 29256094,
                 lobs: [
-                    { n: "5022 - Mineração", r: 17020522, f: 14353762, s: "54.4%" },
-                    { n: "5020 - Bancos", r: 3779396, f: 4688774, s: "12.1%" },
-                    { n: "5023 - Eletrônicos", r: 2809100, f: 2352613, s: "9.0%" },
-                    { n: "5021 - D&J Metais", r: 2617256, f: 2181798, s: "8.4%" },
-                    { n: "5025 - Farma", r: 1857479, f: 2041786, s: "5.9%" },
-                    { n: "6220 - Luxury", r: 1459776, f: 1556826, s: "4.7%" },
-                    { n: "6000 - Joias", r: 1266971, f: 1508320, s: "4.0%" },
-                    { n: "5024 - Cartões", r: 329344, f: 405122, s: "1.1%" },
-                    { n: "5200 - Armazen.", r: 122918, f: 129902, s: "0.4%" },
-                    { n: "5029 - Agro", r: 34775, f: 37191, s: "0.1%" }
+                    { n: "5020 - Bancos", r: 3779396, f: 4688774, s: "12.1%", vr: -909378, vp: "-19.4%" },
+                    { n: "5021 - D&J Metais", r: 2617256, f: 2181798, s: "8.4%", vr: 435458, vp: "20.0%" },
+                    { n: "5022 - Mineração", r: 17020522, f: 14353762, s: "54.4%", vr: 2666760, vp: "18.6%" },
+                    { n: "5023 - Eletrônicos", r: 2809100, f: 2352613, s: "9.0%", vr: 456487, vp: "19.4%" },
+                    { n: "5024 - Cartões", r: 329344, f: 405122, s: "1.1%", vr: -75778, vp: "-18.7%" },
+                    { n: "5025 - Farma", r: 1857479, f: 2041786, s: "5.9%", vr: -184307, vp: "-9.0%" },
+                    { n: "5029 - Agro", r: 34775, f: 37191, s: "0.1%", vr: -2416, vp: "-6.5%" },
+                    { n: "5200 - Armazen.", r: 122918, f: 129902, s: "0.4%", vr: -6984, vp: "-5.4%" },
+                    { n: "6000 - Joias", r: 1266971, f: 1508320, s: "4.0%", vr: -241349, vp: "-16.0%" },
+                    { n: "6220 - Luxury", r: 1459776, f: 1556826, s: "4.7%", vr: -97050, vp: "-6.2%" }
                 ],
                 gestores: [
-                    { n: "RICARDO", r: 16278436, f: 14140243, top: [
-                        {c:"KINROSS GOLD CORPORAT TORONTO", r:4377998, f:3850000},
-                        {c:"BRAZAURO RECURSOS MINERAIS SA", r:2307783, f:1000000},
-                        {c:"CASCAR BRASIL MINERACAO LTDA", r:1128133, f:300000},
-                        {c:"ASAHI REFINING CANADA", r:1095264, f:850000},
-                        {c:"SANTA LUZ DESENVOLVIMENTO MINERAL", r:1037650, f:800000}
-                    ]},
-                    { n: "PAULA", r: 5229564, f: 4646409, top: [
-                        {c:"COIMPA INDUSTRIAL LTDA (1)", r:2355604, f:2039296},
-                        {c:"OURIBANK SA BANCO MULTIPLO", r:847128, f:309500},
-                        {c:"COIMPA INDUSTRIAL LTDA (2)", r:660234, f:213518},
-                        {c:"MOTOROLA MOBILITY COMERCIO", r:431922, f:483444},
-                        {c:"COMPAL TECNOLOGIA DO BRASIL", r:170033, f:120427}
-                    ]},
-                    { n: "F. PELLEGRINI", r: 2681201, f: 3414975, top: [
-                        {c:"TRAVELEX BANCO DE CAMBIO SA", r:986716, f:1176491},
-                        {c:"BANCO DAYCOVAL SA", r:725741, f:873851},
-                        {c:"OURIBANK SA BANCO MULTIPLO", r:509988, f:411177},
-                        {c:"WESTERN UNION CORRETORA", r:279879, f:385474},
-                        {c:"BANCO RENDIMENTO SA", r:120461, f:77064}
-                    ]},
-                    { n: "MARINA", r: 2551343, f: 2803179, top: [
-                        {c:"TELLERINA COMERCIO DE PRESENTES", r:1102455, f:576300},
-                        {c:"135 - BRINKS GLOBAL SERVICES LTDA", r:566423, f:787314},
-                        {c:"CONIPA INDUSTRIA E COMERCIO", r:239140, f:338915},
-                        {c:"CIDADE MARAVILHOSA IND. ROUPAS", r:190790, f:285242},
-                        {c:"RELOGIOS ROLEX LIMITADA", r:108283, f:83284}
-                    ]},
-                    { n: "JULIANA", r: 2002163, f: 1447773, top: [
-                        {c:"KUEHNENAGEL SERVICOS LOGISTICOS", r:1137897, f:300000},
-                        {c:"TELEFONICA BRASIL SA", r:588742, f:354939},
-                        {c:"MAGAZINE LUIZA SA", r:123472, f:296044},
-                        {c:"DHL GLOBAL FORWARDING BRAZIL", r:70256, f:74108},
-                        {c:"COMEXPORT TRADING COMERCIO", r:43243, f:0}
-                    ]},
-                    { n: "FERNANDA", r: 1857479, f: 2041786, top: [
-                        {c:"ONCO PROD DISTRIBUIDORA", r:1201652, f:668936},
-                        {c:"MERCK SHARP DOHME FARMACEUTICA", r:574077, f:608734},
-                        {c:"FARMA LOGISTICA E ARMAZENS", r:59038, f:265335},
-                        {c:"AMGEN BIOTECNOLOGIA DO BRASIL", r:22339, f:0},
-                        {c:"WORLD COURIER DO BRASIL", r:372, f:0}
-                    ]},
-                    { n: "MARIELLA", r: 543245, f: 517396, top: [
-                        {c:"IDEMIA DO BRASIL SOLUCOES", r:155333, f:104777},
-                        {c:"JUST TIME INDUSTRIA DOS METAIS", r:94534, f:21425},
-                        {c:"135 - BRINKS GLOBAL SERVICES LTDA", r:82083, f:263172},
-                        {c:"THALES DIS BRASIL CARTOES", r:63201, f:0},
-                        {c:"GIESECKEDEVRIENT MOBILE SECURITY", r:27654, f:0}
-                    ]},
-                    { n: "FILIPE COELHO", r: 87705, f: 240326, top: [
-                        {c:"BANCO CENTRAL DO BRASIL", r:87705, f:240326}
-                    ]},
-                    { n: "AFFILIATES", r: 80801, f: 0, top: [
-                        {c:"BGS AGENCIAMENTO DE CARGA", r:80152, f:0},
-                        {c:"BRINKS SEGURANCA E TRANSPORTE", r:649, f:0}
-                    ]}
+                    { n: "RICARDO", r: 16278436, f: 14140243, vr: 2138193, vp: "15.1%", top: [{c:"KINROSS GOLD", r:4377998, f:3850000},{c:"BRAZAURO", r:2307783, f:1000000},{c:"CASCAR BRASIL", r:1128133, f:300000},{c:"ASAHI REFINING", r:1095264, f:850000},{c:"SANTA LUZ", r:1037650, f:800000}]},
+                    { n: "PAULA", r: 5229564, f: 4646409, vr: 583155, vp: "12.6%", top: [{c:"COIMPA INDUSTRIAL", r:3015839, f:2252814},{c:"OURIBANK SA", r:847128, f:309500},{c:"MOTOROLA MOBILITY", r:431922, f:483444},{c:"COMPAL TECNOLOGIA", r:170033, f:120427},{c:"BANCO RENDIMENTO", r:110673, f:60500}]},
+                    { n: "F. PELLEGRINI", r: 2681201, f: 3414975, vr: -733774, vp: "-21.5%", top: [{c:"TRAVELEX", r:986716, f:1176491},{c:"DAYCOVAL SA", r:725741, f:873851},{c:"OURIBANK SA", r:509988, f:411177},{c:"WESTERN UNION", r:279879, f:385474},{c:"RENDIMENTO SA", r:120461, f:77064}]},
+                    { n: "MARINA", r: 2551343, f: 2803179, vr: -251836, vp: "-9.0%", top: [{c:"TELLERINA", r:1102455, f:576300},{c:"135 - BRINKS GLOBAL", r:566423, f:787314},{c:"CONIPA", r:239140, f:338915},{c:"CIDADE MARAVILHOSA", r:190790, f:285242},{c:"RELOGIOS ROLEX", r:108283, f:83284}]},
+                    { n: "JULIANA", r: 2002163, f: 1447773, vr: 554390, vp: "38.3%", top: [{c:"KUEHNENAGEL", r:1137897, f:300000},{c:"TELEFONICA BRASIL", r:588742, f:354939},{c:"MAGAZINE LUIZA", r:123472, f:296044},{c:"DHL GLOBAL", r:70256, f:74108},{c:"COMEXPORT", r:43243, f:0}]},
+                    { n: "FERNANDA", r: 1857479, f: 2041786, vr: -184307, vp: "-9.0%", top: [{c:"ONCO PROD", r:1201652, f:668936},{c:"MERCK SHARP DOHME", r:574077, f:608734},{c:"FARMA LOGISTICA", r:59038, f:265335},{c:"AMGEN BIOTECNOLOGIA", r:22339, f:0},{c:"WORLD COURIER", r:372, f:0}]},
+                    { n: "MARIELLA", r: 543245, f: 517396, vr: 25849, vp: "5.0%", top: [{c:"IDEMIA DO BRASIL", r:155333, f:104777},{c:"JUST TIME", r:94534, f:21425},{c:"135 - BRINKS GLOBAL", r:82083, f:263172},{c:"THALES", r:63201, f:0},{c:"GIESECKEDEVRIENT", r:27654, f:0}]},
+                    { n: "FILIPE COELHO", r: 87705, f: 240326, vr: -152621, vp: "-63.5%", top: [{c:"BANCO CENTRAL", r:87705, f:240326}]},
+                    { n: "AFFILIATES", r: 66401, f: 4006, vr: 62395, vp: "100%", top: [{c:"BGS AGENCIAMENTO", r:80152, f:0},{c:"BRINKS SEGURANCA", r:649, f:0}]}
                 ]
             }
         };
 
-        const fNum = (v) => v === 0 ? "0" : Math.round(v).toLocaleString('pt-BR');
-        const fPct = (r, f) => f > 0 ? ((r/f-1)*100).toFixed(1) + '%' : (r > 0 ? '100%' : '0%');
+        const fNum = (v) => Math.round(v).toLocaleString('pt-BR');
+        const getCorVar = (val) => val >= 0 ? 'text-emerald-500' : 'text-red-500';
 
         function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
 
-        function abrirTop5(nome) {
-            const g = dados["JANEIRO"].gestores.find(i => i.n === nome);
+        function abrirTop5(nome, mes) {
+            if (!dados[mes]) return;
+            const g = dados[mes].gestores.find(i => i.n === nome);
             if (!g) return;
             document.getElementById('m-titulo').innerText = `TOP CLIENTES - ${nome}`;
+            document.getElementById('m-head').innerHTML = `<tr class="text-slate-400 text-[11px] border-b"><th class="text-left py-2 w-[30%]">CLIENTE</th><th class="text-right">REAL</th><th class="text-right">FCST</th><th class="text-right">VAR R$</th><th class="text-right">VAR %</th><th class="text-right">SHARE</th></tr>`;
             document.getElementById('m-lista').innerHTML = g.top.map(c => {
-                const varR = c.r - c.f;
-                const share = ((c.r / g.r) * 100).toFixed(1) + '%';
-                return `<tr class="border-b">
-                    <td class="font-bold py-2 text-slate-700">${c.c}</td>
-                    <td class="text-right font-medium">${fNum(c.r)}</td>
-                    <td class="text-right text-slate-400">${fNum(c.f)}</td>
-                    <td class="text-right ${varR>=0?'text-emerald-500':'text-red-500'} font-medium">${varR>0?'+':''}${fNum(varR)}</td>
-                    <td class="text-right ${varR>=0?'text-emerald-500':'text-red-500'} font-bold">${fPct(c.r, c.f)}</td>
-                    <td class="text-right text-slate-500 font-bold">${share}</td>
-                </tr>`;
+                const vr = c.r - c.f;
+                const vp = c.f > 0 ? ((c.r/c.f-1)*100).toFixed(1) + '%' : '100%';
+                return `<tr class="border-b text-[11px] hover:bg-slate-50"><td class="font-bold py-2">${c.c}</td><td class="text-right font-semibold">${fNum(c.r)}</td><td class="text-right text-slate-400">${fNum(c.f)}</td><td class="text-right font-semibold ${getCorVar(vr)}">${vr > 0 ? '+' : ''}${fNum(vr)}</td><td class="text-right ${getCorVar(vr)} font-bold">${vp}</td><td class="text-right font-black text-slate-700">${((c.r/g.r)*100).toFixed(1)}%</td></tr>`
             }).join('');
             document.getElementById('modal').classList.remove('hidden');
         }
 
         function render(mes) {
-            const d = dados[mes];
             document.getElementById('status-mes').innerText = mes;
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.mes === mes));
 
+            const d = dados[mes];
+            const alertLob = document.getElementById('alert-lob');
+            const alertGestor = document.getElementById('alert-gestor');
+
             if (!d) {
-                ["k-real","k-fcst","k-vrs","k-vpt"].forEach(id => document.getElementById(id).innerText = "0");
-                document.getElementById('share-bar').innerHTML = '';
-                const empty = `<tr><td colspan="6" class="text-center py-24 text-slate-300 font-bold uppercase text-[9px]">Aguardando Consolidação</td></tr>`;
-                document.getElementById('body-lob').innerHTML = empty;
-                document.getElementById('body-gestor').innerHTML = empty;
-                document.getElementById('footer-lob').innerHTML = '';
-                document.getElementById('footer-gestor').innerHTML = '';
+                alertLob.classList.remove('hidden');
+                alertGestor.classList.remove('hidden');
+                document.getElementById('k-real').innerText = "0";
+                document.getElementById('k-fcst').innerText = "0";
+                document.getElementById('k-vrs').innerText = "0";
+                document.getElementById('k-vpt').innerText = "0%";
+                document.getElementById('body-lob').innerHTML = "";
+                document.getElementById('body-gestor').innerHTML = "";
+                document.getElementById('share-bar').innerHTML = "";
+                document.getElementById('footer-lob').innerHTML = "";
+                document.getElementById('footer-gestor').innerHTML = "";
                 return;
             }
 
+            alertLob.classList.add('hidden');
+            alertGestor.classList.add('hidden');
+
+            const varTotal = d.real - d.fcst;
+            const corDinamica = getCorVar(varTotal);
+            
             document.getElementById('k-real').innerText = fNum(d.real);
             document.getElementById('k-fcst').innerText = fNum(d.fcst);
-            const varT = d.real - d.fcst;
-            document.getElementById('k-vrs').innerText = (varT > 0 ? '+ ' : '') + fNum(varT);
-            document.getElementById('k-vpt').innerText = '+ 7%';
-
-            document.getElementById('share-bar').innerHTML = d.lobs.map(l => `
-                <div class="share-item">
-                    <p class="text-[7px] font-bold text-slate-400 uppercase">${l.n.split('-')[1].trim()}</p>
-                    <p class="text-[10px] font-black text-slate-700">${l.s}</p>
-                </div>
-            `).join('');
-
-            document.getElementById('body-lob').innerHTML = d.lobs.map(l => {
-                const v = l.r - l.f;
-                return `<tr>
-                    <td class="w-[30%] font-bold text-slate-600">${l.n}</td>
-                    <td class="w-[18%] text-right">${fNum(l.r)}</td>
-                    <td class="w-[18%] text-right text-slate-400">${fNum(l.f)}</td>
-                    <td class="w-[20%] text-right ${v>=0?'v-pos':'v-neg'}">${v>0?'+':''}${fNum(v)}</td>
-                    <td class="w-[14%] text-right ${v>=0?'v-pos':'v-neg'}">${fPct(l.r, l.f)}</td>
-                </tr>`;
-            }).join('');
-
-            document.getElementById('body-gestor').innerHTML = d.gestores.map(g => {
-                const v = g.r - g.f;
-                return `<tr>
-                    <td class="w-[25%] font-bold text-slate-600">${g.n}</td>
-                    <td class="w-[16%] text-right">${fNum(g.r)}</td>
-                    <td class="w-[16%] text-right text-slate-400">${fNum(g.f)}</td>
-                    <td class="w-[18%] text-right ${v>=0?'v-pos':'v-neg'}">${v>0?'+':''}${fNum(v)}</td>
-                    <td class="w-[13%] text-right ${v>=0?'v-pos':'v-neg'}">${fPct(g.r, g.f)}</td>
-                    <td class="w-[12%] text-center"><button onclick="abrirTop5('${g.n}')" class="bg-slate-700 text-white text-[8px] px-1.5 rounded font-bold hover:bg-slate-900 transition-all">VER</button></td>
-                </tr>`;
-            }).join('');
-
-            const fL = `<td class="w-[30%]">TOTAL</td><td class="w-[18%] text-right">${fNum(d.real)}</td><td class="w-[18%] text-right">${fNum(d.fcst)}</td><td class="w-[20%] text-right">+${fNum(d.real-d.fcst)}</td><td class="w-[14%] text-right">7%</td>`;
-            document.getElementById('footer-lob').innerHTML = fL;
+            document.getElementById('k-vrs').innerText = (varTotal > 0 ? "+ " : "") + fNum(varTotal);
+            document.getElementById('k-vpt').innerText = "7.0%";
             
-            const fG = `<td class="w-[25%]">TOTAL</td><td class="w-[16%] text-right">${fNum(d.real)}</td><td class="w-[16%] text-right">${fNum(d.fcst)}</td><td class="w-[18%] text-right">+${fNum(d.real-d.fcst)}</td><td class="w-[13%] text-right">7%</td><td class="w-[12%]"></td>`;
-            document.getElementById('footer-gestor').innerHTML = fG;
+            document.getElementById('k-vrs').className = `text-xl font-black ${corDinamica}`;
+            document.getElementById('k-vpt').className = `text-xl font-black ${corDinamica}`;
+
+            const shares = [...d.lobs].sort((a, b) => parseFloat(b.s) - parseFloat(a.s));
+            document.getElementById('share-bar').innerHTML = shares.map(l => {
+                const pct = parseFloat(l.s);
+                const nome = l.n.includes('-') ? l.n.split('-')[1].trim() : l.n;
+                return `<div class="share-item"><div class="flex justify-between items-center"><span class="text-[9px] font-black">${l.s}</span><div class="w-10 h-1 bg-slate-100 rounded-full overflow-hidden"><div class="bg-slate-800 h-full" style="width:${pct}%"></div></div></div><p class="text-[8.5px] text-slate-500 font-bold truncate uppercase">${nome}</p></div>`
+            }).join('');
+
+            document.getElementById('body-lob').innerHTML = d.lobs.map(l => `<tr><td class="font-bold text-slate-600">${l.n}</td><td class="text-right">${fNum(l.r)}</td><td class="text-right text-slate-400">${fNum(l.f)}</td><td class="text-right font-semibold ${getCorVar(l.vr)}">${l.vr > 0 ? '+' : ''}${fNum(l.vr)}</td><td class="text-right ${getCorVar(l.vr)} font-bold">${l.vp}</td></tr>`).join('');
+            document.getElementById('body-gestor').innerHTML = d.gestores.map(g => `<tr><td class="font-bold text-slate-600">${g.n}</td><td class="text-right">${fNum(g.r)}</td><td class="text-right text-slate-400">${fNum(g.f)}</td><td class="text-right font-semibold ${getCorVar(g.vr)}">${g.vr > 0 ? '+' : ''}${fNum(g.vr)}</td><td class="text-right ${getCorVar(g.vr)} font-bold">${g.vp}</td><td class="text-center"><button onclick="abrirTop5('${g.n}', '${mes}')" class="bg-slate-800 text-white text-[8px] px-2 py-0.5 rounded uppercase font-bold">VER</button></td></tr>`).join('');
+
+            const footer = `<td class="text-left">TOTAL</td><td class="text-right">${fNum(d.real)}</td><td class="text-right">${fNum(d.fcst)}</td><td class="text-right">${varTotal > 0 ? '+' : ''}${fNum(varTotal)}</td><td class="text-right">7.0%</td>`;
+            document.getElementById('footer-lob').innerHTML = footer;
+            document.getElementById('footer-gestor').innerHTML = footer + `<td></td>`;
         }
 
+        const mShort = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
         const mFull = ["JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"];
         const nav = document.getElementById('nav-meses');
-        ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"].forEach((m, i) => {
+        mShort.forEach((m, i) => {
             const btn = document.createElement('button');
             btn.className = 'nav-btn'; btn.innerText = m; btn.dataset.mes = mFull[i];
             btn.onclick = () => render(mFull[i]);
