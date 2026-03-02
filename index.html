@@ -73,31 +73,40 @@
         const fmt = (v) => Math.round(v).toLocaleString('pt-BR');
         const metaAnualTotal = 365593723;
 
-        // Dados extraídos das imagens fornecidas
         const budgetLOB = {
-            "JAN": {"5020 - Bancos": 4747555, "5021 - PGM": 2209150, "5022 - Mineração": 13738770, "5023 - Eletrônicos": 2748587, "5024 - Cartões": 405122, "5025 - Farma": 2072462, "5029 - Outros": 37191, "5200 - Armazenagem": 129902, "6000 - Joias": 1527229, "6220 - Luxo": 1640125},
-            "FEV": {"5020 - Bancos": 3890592, "5021 - PGM": 2238319, "5022 - Mineração": 11820540, "5023 - Eletrônicos": 3152172, "5024 - Cartões": 281968, "5025 - Farma": 2205679, "5029 - Outros": 40591, "5200 - Armazenagem": 45095, "6000 - Joias": 2078395, "6220 - Luxo": 1608520},
-            "MAR": {"5020 - Bancos": 3991180, "5021 - PGM": 2473205, "5022 - Mineração": 14304163, "5023 - Eletrônicos": 4332109, "5024 - Cartões": 344919, "5025 - Farma": 2554802, "5029 - Outros": 27674, "5200 - Armazenagem": 64358, "6000 - Joias": 1748750, "6220 - Luxo": 1742198},
-            "ABR": {"5020 - Bancos": 3865992, "5021 - PGM": 2431920, "5022 - Mineração": 13501404, "5023 - Eletrônicos": 2903459, "5024 - Cartões": 360426, "5025 - Farma": 2531910, "5029 - Outros": 26013, "5200 - Armazenagem": 52938, "6000 - Joias": 1777612, "6220 - Luxo": 2024805},
-            "MAI": {"5020 - Bancos": 4430421, "5021 - PGM": 2370921, "5022 - Mineração": 13646418, "5023 - Eletrônicos": 3417449, "5024 - Cartões": 363111, "5025 - Farma": 2506511, "5029 - Outros": 25481, "5200 - Armazenagem": 96768, "6000 - Joias": 1553486, "6220 - Luxo": 1972049},
-            "JUN": {"5020 - Bancos": 4453163, "5021 - PGM": 2002798, "5022 - Mineração": 14170346, "5023 - Eletrônicos": 3682758, "5024 - Cartões": 261756, "5025 - Farma": 2698006, "5029 - Outros": 32818, "5200 - Armazenagem": 118053, "6000 - Joias": 1627623, "6220 - Luxo": 1799102},
-            "JUL": {"5020 - Bancos": 4655942, "5021 - PGM": 2345894, "5022 - Mineração": 13762929, "5023 - Eletrônicos": 3022523, "5024 - Cartões": 440342, "5025 - Farma": 2399155, "5029 - Outros": 21940, "5200 - Armazenagem": 85450, "6000 - Joias": 1835958, "6220 - Luxo": 1893423},
-            "AGO": {"5020 - Bancos": 3955880, "5021 - PGM": 2024209, "5022 - Mineração": 14213009, "5023 - Eletrônicos": 2916383, "5024 - Cartões": 335606, "5025 - Farma": 2594758, "5029 - Outros": 62393, "5200 - Armazenagem": 27476, "6000 - Joias": 1886970, "6220 - Luxo": 1820458},
-            "SET": {"5020 - Bancos": 3955880, "5021 - PGM": 2055221, "5022 - Mineração": 15544247, "5023 - Eletrônicos": 3490612, "5024 - Cartões": 335606, "5025 - Farma": 2802161, "5029 - Outros": 62190, "5200 - Armazenagem": 43408, "6000 - Joias": 1939349, "6220 - Luxo": 2026585},
-            "OUT": {"5020 - Bancos": 3955880, "5021 - PGM": 2225195, "5022 - Mineração": 15147724, "5023 - Eletrônicos": 4143945, "5024 - Cartões": 335606, "5025 - Farma": 2849119, "5029 - Outros": 62394, "5200 - Armazenagem": 27486, "6000 - Joias": 2251089, "6220 - Luxo": 1921400},
-            "NOV": {"5020 - Bancos": 3839191, "5021 - PGM": 2159386, "5022 - Mineração": 15361584, "5023 - Eletrônicos": 4176958, "5024 - Cartões": 513853, "5025 - Farma": 2670642, "5029 - Outros": 60328, "5200 - Armazenagem": 34301, "6000 - Joias": 2129025, "6220 - Luxo": 1814305},
-            "DEZ": {"5020 - Bancos": 3834227, "5021 - PGM": 1793115, "5022 - Mineração": 15770707, "5023 - Eletrônicos": 2943786, "5024 - Cartões": 326843, "5025 - Farma": 2805236, "5029 - Outros": 60447, "5200 - Armazenagem": 26628, "6000 - Joias": 2007205, "6220 - Luxo": 1828531},
-            "CONSOLIDADO": {"5020 - Bancos": 48334223, "5021 - PGM": 26127346, "5022 - Mineração": 168347112, "5023 - Eletrônicos": 41597545, "5024 - Cartões": 4354349, "5025 - Farma": 31299127, "5029 - Outros": 498077, "5200 - Armazenagem": 785195, "6000 - Joias": 21905972, "6220 - Luxo": 22344777}
+            "JAN": {"5020 - Bancos": 4747555, "5021 - PGM": 2209150, "5022 - Mineração": 13738770, "5023 - Eletrônicos": 2748587, "5024 - Cartões": 405122, "5025 - Farma": 2072462, "5029 - Agro": 37191, "5200 - Armazenagem": 129902, "6000 - Joias": 1527230, "6220 - Luxo": 1640125},
+            "FEV": {"5020 - Bancos": 3890592, "5021 - PGM": 2238319, "5022 - Mineração": 11820540, "5023 - Eletrônicos": 3152172, "5024 - Cartões": 281968, "5025 - Farma": 2205679, "5029 - Agro": 40591, "5200 - Armazenagem": 45095, "6000 - Joias": 2078395, "6220 - Luxo": 1608520},
+            "MAR": {"5020 - Bancos": 3991180, "5021 - PGM": 2473205, "5022 - Mineração": 14304163, "5023 - Eletrônicos": 4332109, "5024 - Cartões": 344919, "5025 - Farma": 2554802, "5029 - Agro": 27674, "5200 - Armazenagem": 64358, "6000 - Joias": 1748750, "6220 - Luxo": 1742198},
+            "ABR": {"5020 - Bancos": 3865992, "5021 - PGM": 2431920, "5022 - Mineração": 13501404, "5023 - Eletrônicos": 2903459, "5024 - Cartões": 360426, "5025 - Farma": 2531910, "5029 - Agro": 26013, "5200 - Armazenagem": 52938, "6000 - Joias": 1777612, "6220 - Luxo": 2024805},
+            "MAI": {"5020 - Bancos": 4430421, "5021 - PGM": 2370921, "5022 - Mineração": 13646418, "5023 - Eletrônicos": 3417449, "5024 - Cartões": 363111, "5025 - Farma": 2506511, "5029 - Agro": 25481, "5200 - Armazenagem": 96768, "6000 - Joias": 1553486, "6220 - Luxo": 1972049},
+            "JUN": {"5020 - Bancos": 4453163, "5021 - PGM": 2002798, "5022 - Mineração": 14170346, "5023 - Eletrônicos": 3682758, "5024 - Cartões": 261756, "5025 - Farma": 2698006, "5029 - Agro": 32818, "5200 - Armazenagem": 118053, "6000 - Joias": 1627623, "6220 - Luxo": 1799102},
+            "JUL": {"5020 - Bancos": 4655942, "5021 - PGM": 2345894, "5022 - Mineração": 13762929, "5023 - Eletrônicos": 3022523, "5024 - Cartões": 440342, "5025 - Farma": 2399155, "5029 - Agro": 21940, "5200 - Armazenagem": 85450, "6000 - Joias": 1835958, "6220 - Luxo": 1893423},
+            "AGO": {"5020 - Bancos": 3955880, "5021 - PGM": 2024209, "5022 - Mineração": 14213009, "5023 - Eletrônicos": 2916383, "5024 - Cartões": 335606, "5025 - Farma": 2594758, "5029 - Agro": 62393, "5200 - Armazenagem": 27476, "6000 - Joias": 1886970, "6220 - Luxo": 1820458},
+            "SET": {"5020 - Bancos": 3955880, "5021 - PGM": 2055221, "5022 - Mineração": 15544247, "5023 - Eletrônicos": 3490612, "5024 - Cartões": 335606, "5025 - Farma": 2802161, "5029 - Agro": 62190, "5200 - Armazenagem": 43408, "6000 - Joias": 1939349, "6220 - Luxo": 2026585},
+            "OUT": {"5020 - Bancos": 3955880, "5021 - PGM": 2225195, "5022 - Mineração": 15147724, "5023 - Eletrônicos": 4143945, "5024 - Cartões": 335606, "5025 - Farma": 2849119, "5029 - Agro": 62394, "5200 - Armazenagem": 27486, "6000 - Joias": 2251089, "6220 - Luxo": 1921400},
+            "NOV": {"5020 - Bancos": 3839191, "5021 - PGM": 2159386, "5022 - Mineração": 15361584, "5023 - Eletrônicos": 4176958, "5024 - Cartões": 513853, "5025 - Farma": 2670642, "5029 - Agro": 60328, "5200 - Armazenagem": 34301, "6000 - Joias": 2129025, "6220 - Luxo": 1814305},
+            "DEZ": {"5020 - Bancos": 3834227, "5021 - PGM": 1793115, "5022 - Mineração": 15770707, "5023 - Eletrônicos": 2943786, "5024 - Cartões": 326843, "5025 - Farma": 2805236, "5029 - Agro": 60447, "5200 - Armazenagem": 26628, "6000 - Joias": 2007205, "6220 - Luxo": 1828531},
+            "CONSOLIDADO": {"5020 - Bancos": 48334223, "5021 - PGM": 26127346, "5022 - Mineração": 168347112, "5023 - Eletrônicos": 41597545, "5024 - Cartões": 4354349, "5025 - Farma": 31299127, "5029 - Agro": 498077, "5200 - Armazenagem": 785195, "6000 - Joias": 21905972, "6220 - Luxo": 22344777}
         };
 
         const budgetGST = {
-            "JAN": {"FERNANDA": 2072462, "JULIANA": 1843747, "MARIELLA MENDOZA": 580957, "MARINA": 2841827, "PAULA": 4809774, "RICARDO": 13525251},
-            "FEV": {"FERNANDA": 2205679, "JULIANA": 1726956, "MARIELLA MENDOZA": 765690, "MARINA": 3133979, "PAULA": 4675453, "RICARDO": 11613272},
-            "CONSOLIDADO": {"FERNANDA": 30690330, "JULIANA": 24492051, "MARIELLA MENDOZA": 8874261, "MARINA": 38558069, "PAULA": 58437400, "RICARDO": 166504240}
+            "JAN": {"AFFILIATE": 4006, "FELIPE PELLEGRINI": 3337744, "FERNANDA": 2072462, "FILIPE COELHO": 240326, "JULIANA": 1843747, "MARIELLA ": 580957, "MARINA": 2841827, "PAULA": 4809774, "RICARDO": 13525251},
+            "FEV": {"AFFILIATE": 5964, "FELIPE PELLEGRINI": 2994554, "FERNANDA": 2205679, "FILIPE COELHO": 240326, "JULIANA": 1726956, "MARIELLA ": 765690, "MARINA": 3133979, "PAULA": 4675453, "RICARDO": 11613272},
+            "MAR": {"FELIPE PELLEGRINI": 3017475, "FERNANDA": 2554802, "FILIPE COELHO": 240326, "JULIANA": 1910897, "MARIELLA ": 864758, "MARINA": 2910910, "PAULA": 5955984, "RICARDO": 14128207},
+            "ABR": {"FELIPE PELLEGRINI": 2986310, "FERNANDA": 2531910, "FILIPE COELHO": 240326, "JULIANA": 1860318, "MARIELLA ": 739234, "MARINA": 3262430, "PAULA": 4516999, "RICARDO": 13338951},
+            "MAI": {"FELIPE PELLEGRINI": 3541722, "FERNANDA": 2506511, "FILIPE COELHO": 240326, "JULIANA": 1831860, "MARIELLA ": 581036, "MARINA": 3175768, "PAULA": 5019944, "RICARDO": 13485450},
+            "JUN": {"FELIPE PELLEGRINI": 3037813, "FERNANDA": 2698006, "FILIPE COELHO": 240326, "JULIANA": 1828137, "MARIELLA ": 630198, "MARINA": 2909120, "PAULA": 5527375, "RICARDO": 13975450},
+            "JUL": {"FELIPE PELLEGRINI": 3738918, "FERNANDA": 2399155, "FILIPE COELHO": 240326, "JULIANA": 1810775, "MARIELLA ": 828648, "MARINA": 3179724, "PAULA": 4760559, "RICARDO": 13505450},
+            "AGO": {"FELIPE PELLEGRINI": 2928229, "FERNANDA": 2594758, "FILIPE COELHO": 240326, "JULIANA": 1855546, "MARIELLA ": 862751, "MARINA": 3085809, "PAULA": 4349274, "RICARDO": 13920450},
+            "SET": {"FELIPE PELLEGRINI": 2928229, "FERNANDA": 2802161, "FILIPE COELHO": 240326, "JULIANA": 2105808, "MARIELLA ": 796753, "MARINA": 3410883, "PAULA": 4735648, "RICARDO": 15235450},
+            "OUT": {"FELIPE PELLEGRINI": 2928229, "FERNANDA": 2849119, "FILIPE COELHO": 240326, "JULIANA": 3087475, "MARIELLA ": 723996, "MARINA": 3689534, "PAULA": 4550709, "RICARDO": 14850450},
+            "NOV": {"FELIPE PELLEGRINI": 2834878, "FERNANDA": 2670642, "FILIPE COELHO": 240326, "JULIANA": 2921687, "MARIELLA ": 789666, "MARINA": 3572878, "PAULA": 4677339, "RICARDO": 15052158},
+            "DEZ": {"FELIPE PELLEGRINI": 2830907, "FERNANDA": 2805236, "FILIPE COELHO": 240326, "JULIANA": 1542237, "MARIELLA ": 601382, "MARINA": 3466207, "PAULA": 4462130, "RICARDO": 15448301},
+            "CONSOLIDADO": {"FERNANDA": 30690330, "JULIANA": 24492051, "MARIELLA ": 8874261, "MARINA": 38558069, "PAULA": 58437400, "RICARDO": 166504240}
         };
 
-        const realizadoLOB_JAN = {"5020 - Bancos": 3779396, "5021 - PGM": 2617256, "5022 - Mineração": 17020522, "5023 - Eletrônicos": 2809100, "5024 - Cartões": 329344, "5025 - Farma": 1857479, "5029 - Outros": 34775, "5200 - Armazenagem": 122918, "6000 - Joias": 1266971, "6220 - Luxo": 1459776};
-        const realizadoGST_JAN = {"FERNANDA": 1857479, "JULIANA": 2002163, "MARIELLA MENDOZA": 543245, "MARINA": 2551343, "PAULA": 5229564, "RICARDO": 16278436};
+        const realizadoLOB_JAN = {"5020 - Bancos": 3779396, "5021 - PGM": 2617256, "5022 - Mineração": 17020522, "5023 - Eletrônicos": 2809100, "5024 - Cartões": 329344, "5025 - Farma": 1857479, "5029 - Agro": 34775, "5200 - Armazenagem": 122918, "6000 - Joias": 1266971, "6220 - Luxo": 1459776};
+        const realizadoGST_JAN = {"AFFILIATE": 0, "FELIPE PELLEGRINI": 3337744, "FERNANDA": 1857479, "FILIPE COELHO": 240326, "JULIANA": 2002163, "MARIELLA ": 543245, "MARINA": 2551343, "PAULA": 5229564, "RICARDO": 16278436};
 
         function changeView(v) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -107,8 +116,6 @@
             const isC = v === 'CONSOLIDADO';
             const isJan = v === 'JAN';
             const hasRealData = isJan || isC;
-
-            // Se for mês futuro (não JAN e não Consolidado), usa "BUDGET"
             const term = (isJan) ? "FCST" : (isC ? "META ANUAL" : "BUDGET");
             
             document.getElementById('msg-lob').classList.toggle('hidden', hasRealData);
@@ -122,23 +129,34 @@
             const bL = budgetLOB[v] || budgetLOB["JAN"];
             const bG = budgetGST[v] || budgetGST["JAN"];
             
-            let tR = 0, tM = 0;
+            let currentTotalR = 0;
+            let currentTotalM = 0;
 
             const processRows = (data, isGestor) => {
-                let html = "";
                 const realMap = isGestor ? realizadoGST_JAN : realizadoLOB_JAN;
+                const blacklist = ["FELIPE PELLEGRINI", "FILIPE COELHO", "AFFILIATE"];
 
-                Object.keys(data).forEach(k => {
-                    let m = data[k];
-                    let r = hasRealData ? (realMap[k] || 0) : 0;
-                    let vr = r - m;
-                    let vp = m > 0 ? (r/m - 1) * 100 : 0;
-                    
-                    if(!isGestor) { tR += r; tM += m; }
+                let rows = Object.keys(data)
+                    .filter(k => !isGestor || !blacklist.includes(k)) // Filtra os gestores indesejados
+                    .map(k => {
+                        let m = data[k];
+                        let r = hasRealData ? (realMap[k] || 0) : 0;
+                        return { key: k, real: r, meta: m };
+                    });
+
+                if(isGestor) {
+                    rows.sort((a, b) => hasRealData ? (b.real - a.real) : (b.meta - a.meta));
+                }
+
+                let html = "";
+                rows.forEach(row => {
+                    let vr = row.real - row.meta;
+                    let vp = row.meta > 0 ? (row.real/row.meta - 1) * 100 : 0;
+                    if(!isGestor) { currentTotalR += row.real; currentTotalM += row.meta; }
                     html += `<tr>
-                        <td class="col-nome">${k}</td>
-                        <td>${fmt(r)}</td>
-                        <td>${fmt(m)}</td>
+                        <td class="col-nome">${row.key}</td>
+                        <td>${fmt(row.real)}</td>
+                        <td>${fmt(row.meta)}</td>
                         <td class="${vr<0?'neg':'pos'}">${vr >= 0 ? '+' : ''}${fmt(vr)}</td>
                         <td class="${vp<0?'neg':'pos'}">${vp >= 0 ? '+' : ''}${Math.round(vp)}%</td>
                     </tr>`;
@@ -147,24 +165,24 @@
             };
 
             document.getElementById('body-lob').innerHTML = processRows(bL, false);
-            const totalR = tR; const totalM = tM;
             document.getElementById('body-gst').innerHTML = processRows(bG, true);
 
-            const varR = totalR - totalM;
-            const varP = totalM > 0 ? (totalR/totalM - 1) * 100 : 0;
+            const varR = currentTotalR - currentTotalM;
+            const varP = currentTotalM > 0 ? (currentTotalR/currentTotalM - 1) * 100 : 0;
 
-            document.getElementById('foot-lob').innerHTML = `<tr><td class="col-nome text-white">TOTAL GERAL BGS</td><td>${fmt(totalR)}</td><td>${fmt(totalM)}</td><td class="${varR<0?'text-red-400':'text-emerald-400'}">${varR >= 0 ? '+' : ''}${fmt(varR)}</td><td class="${varP<0?'text-red-400':'text-emerald-400'}">${varP >= 0 ? '+' : ''}${Math.round(varP)}%</td></tr>`;
+            document.getElementById('foot-lob').innerHTML = `<tr><td class="col-nome text-white">TOTAL GERAL BGS</td><td>${fmt(currentTotalR)}</td><td>${fmt(currentTotalM)}</td><td class="${varR<0?'text-red-400':'text-emerald-400'}">${varR >= 0 ? '+' : ''}${fmt(varR)}</td><td class="${varP<0?'text-red-400':'text-emerald-400'}">${varP >= 0 ? '+' : ''}${Math.round(varP)}%</td></tr>`;
 
-            document.getElementById('val-r').innerText = "R$ " + fmt(totalR);
-            document.getElementById('val-m').innerText = "R$ " + fmt(totalM);
+            document.getElementById('val-r').innerText = "R$ " + fmt(currentTotalR);
+            document.getElementById('val-m').innerText = "R$ " + fmt(currentTotalM);
             document.getElementById('val-vr').innerText = (varR >= 0 ? "+R$ " : "R$ ") + fmt(varR);
+            document.getElementById('val-vr').className = "kpi-value " + (varR < 0 ? "neg" : "pos");
             document.getElementById('val-vp').innerText = (varP >= 0 ? "+" : "") + Math.round(varP) + "%";
             document.getElementById('val-vp').className = "kpi-value " + (varP < 0 ? "neg" : "pos");
 
-            const realJan = 31297537;
-            const perc = (realJan / metaAnualTotal) * 100;
-            document.getElementById('prog-p').innerText = perc.toFixed(1) + "%";
-            document.getElementById('prog-b').style.width = perc + "%";
+            const realJanTotal = 31297537;
+            const percAnual = (realJanTotal / metaAnualTotal) * 100;
+            document.getElementById('prog-p').innerText = percAnual.toFixed(1) + "%";
+            document.getElementById('prog-b').style.width = percAnual + "%";
         }
 
         const nav = document.getElementById('nav-meses');
