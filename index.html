@@ -2,245 +2,179 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard BGS - 2026</title>
+    <title>Dashboard Receita BGS 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { background: #f1f5f9; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; margin: 0; }
-        .main-layout { display: grid; grid-template-columns: 140px 1fr; height: 100vh; padding: 0.4rem; gap: 0.4rem; box-sizing: border-box; }
-        .sidebar-share { background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 0.3rem; height: 100%; overflow: hidden; }
-        .content-area { display: flex; flex-direction: column; gap: 0.4rem; height: 100%; min-height: 0; }
-        .panels-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; flex: 1; min-height: 0; overflow: hidden; }
-        .panel { background: white; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; }
-        .table-wrapper { flex: 1; overflow-y: auto; position: relative; }
+        body { background: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; padding: 0.4rem; display: flex; flex-direction: column; }
+        .table-container { overflow-y: auto; flex: 1; position: relative; scrollbar-width: none; }
+        .table-container::-webkit-scrollbar { display: none; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background: #f8fafc; font-size: 8.5px; color: #64748b; text-transform: uppercase; padding: 6px 3px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
-        td { padding: 5px 6px; font-size: 10px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
-        .row-total { background: #0f172a; color: white; font-weight: 800; font-size: 11px; text-transform: uppercase; width: 100%; }
-        .row-total td { border: none; padding: 8px 6px; }
-        .nav-btn { padding: 3px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; background: #cbd5e1; color: #475569; cursor: pointer; }
-        .nav-btn.active { background: #0f172a; color: white; }
-        .kpi-card { background: white; border-radius: 6px; padding: 0.6rem; border: 1px solid #e2e8f0; border-left-width: 3px; flex: 1; }
-        .logo-img { height: 44px; width: auto; } /* Tamanho ajustado para igualar ao box do mês */
-        .share-item { padding: 4px 6px; border-radius: 4px; border: 1px solid #f1f5f9; background: #fcfcfc; margin-bottom: 2px; }
-        .empty-state { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.95); z-index: 20; text-align: center; padding: 10px; }
+        th { background: #ffffff; color: #64748b; text-transform: uppercase; padding: 4px 2px; border-bottom: 2px solid #e2e8f0; text-align: right; font-size: 7.5px; font-weight: 800; position: sticky; top: 0; z-index: 10; }
+        td { padding: 3px 4px; border-bottom: 1px solid #f1f5f9; text-align: right; font-weight: 700; font-size: 8.5px; }
+        .col-nome { text-align: left; font-weight: 800; color: #334155; width: 52%; padding-left: 6px; line-height: 1.1; font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        tfoot td { background: #1e293b; color: white; font-weight: 800; padding: 5px 4px; position: sticky; bottom: 0; font-size: 9px; }
+        .kpi-card { background: white; border-radius: 10px; padding: 8px 10px; border-top: 4px solid; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .kpi-title { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+        .kpi-value { font-size: 1.1rem; font-weight: 900; line-height: 1; }
+        .nav-btn { padding: 3px 6px; border-radius: 4px; font-size: 9px; font-weight: 800; background: #e2e8f0; color: #475569; transition: all 0.2s; }
+        .nav-btn.active { background: #1e293b; color: white; }
+        .neg { color: #ef4444 !important; }
+        .pos { color: #10b981 !important; }
+        .empty-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.9); color: #64748b; font-size: 10px; font-weight: 700; text-align: center; padding: 20px; z-index: 20; border-radius: 8px; }
     </style>
 </head>
 <body>
-
-    <div id="modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden">
-            <div class="bg-slate-900 text-white p-2 flex justify-between items-center">
-                <h3 class="font-black italic uppercase text-[12px]" id="m-titulo">TOP CLIENTES</h3>
-                <button onclick="fecharModal()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-[10px] font-bold">FECHAR X</button>
+    <div class="flex flex-col gap-2 h-full">
+        <header class="flex items-center justify-between bg-white p-2 px-4 rounded-xl border border-slate-200 shrink-0 shadow-sm">
+            <div class="flex items-center gap-4">
+                <h1 class="text-xs font-black text-slate-900 italic uppercase tracking-tighter">Receita BGS 2026</h1>
+                <nav class="flex gap-1" id="nav-meses"></nav>
+                <button onclick="changeView('CONSOLIDADO')" id="btn-CONSOLIDADO" class="nav-btn uppercase ml-2">Consolidado (YTD)</button>
             </div>
-            <div class="p-3">
-                <table class="w-full">
-                    <thead id="m-head"></thead>
-                    <tbody id="m-lista"></tbody>
-                </table>
+            <span class="text-[#00529B] font-black text-lg italic">BRINK'S</span>
+        </header>
+
+        <div id="kpi-grid" class="grid grid-cols-5 gap-2 shrink-0">
+            <div class="kpi-card" style="border-top-color: #1e293b;"><p id="label-r" class="kpi-title text-slate-500">REALIZADO MÊS</p><p id="val-r" class="kpi-value text-slate-900">R$ 0</p></div>
+            <div class="kpi-card" style="border-top-color: #10b981; background-color: #f0fdf4;"><p id="label-m" class="kpi-title text-emerald-600">FCST MÊS</p><p id="val-m" class="kpi-value text-emerald-700">R$ 0</p></div>
+            <div class="kpi-card" style="border-top-color: #f59e0b; background-color: #fffbeb;"><p id="label-vr" class="kpi-title text-amber-600">VAR R$</p><p id="val-vr" class="kpi-value">R$ 0</p></div>
+            <div class="kpi-card" style="border-top-color: #3b82f6; background-color: #eff6ff;"><p id="label-vp" class="kpi-title text-blue-600">VAR %</p><p id="val-vp" class="kpi-value">0%</p></div>
+            <div class="kpi-card" style="border-top-color: #6366f1; background-color: #f5f3ff;">
+                <div class="flex justify-between items-start">
+                    <div><p class="kpi-title text-indigo-600">ATING. META ANUAL</p><p class="text-[7px] font-bold text-slate-400">META: R$ 365.593.723</p></div>
+                    <p id="prog-p" class="font-black text-indigo-700 text-sm">8.6%</p>
+                </div>
+                <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden"><div id="prog-b" class="bg-indigo-500 h-full" style="width: 8.6%;"></div></div>
+            </div>
+        </div>
+
+        <div class="relative flex-1 min-h-0">
+            <div id="main-content" class="grid grid-cols-2 gap-2 h-full">
+                <div class="bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm relative">
+                    <div class="bg-slate-800 text-white text-[8px] font-black py-1 text-center uppercase tracking-widest">Performance por LOB</div>
+                    <div class="table-container">
+                        <div id="msg-lob" class="empty-msg hidden">Dados serão divulgados após o fechamento do período</div>
+                        <table><thead><tr><th class="text-left pl-3">LOB</th><th>Real</th><th id="th-m-lob">FCST</th><th>Var R$</th><th class="pr-3">Var %</th></tr></thead><tbody id="body-lob"></tbody><tfoot id="foot-lob"></tfoot></table>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm relative">
+                    <div class="bg-slate-800 text-white text-[8px] font-black py-1 text-center uppercase tracking-widest">Performance por Gestor</div>
+                    <div class="table-container">
+                        <div id="msg-gst" class="empty-msg hidden">Dados serão divulgados após o fechamento do período</div>
+                        <table><thead><tr><th class="text-left pl-3">Gestor</th><th>Real</th><th id="th-m-gst">FCST</th><th>Var R$</th><th class="pr-3">Var %</th></tr></thead><tbody id="body-gst"></tbody></table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="main-layout">
-        <aside class="sidebar-share">
-            <p class="text-[9px] font-black text-slate-400 uppercase text-center py-2 border-b bg-slate-50">Share LOB %</p>
-            <div id="share-bar" class="flex flex-col gap-1 p-1"></div>
-        </aside>
-
-        <main class="content-area">
-            <header class="flex items-center justify-between bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
-                <div class="flex items-center gap-3">
-                    <h1 class="text-xl font-black text-slate-900 italic uppercase tracking-tighter">Receita BGS</h1>
-                    <nav class="flex gap-1" id="nav-meses"></nav>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div id="status-mes" class="bg-slate-900 text-white px-4 py-2 rounded-md font-black text-[12px] tracking-widest uppercase flex items-center justify-center min-w-[100px]">JANEIRO</div>
-                    <img src="BRINKS.png" alt="Brink's" class="logo-img">
-                </div>
-            </header>
-
-            <div class="flex gap-2">
-                <div class="kpi-card border-l-slate-400">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase">Realizado</p>
-                    <p id="k-real" class="text-xl font-black text-slate-800">0</p>
-                </div>
-                <div class="kpi-card border-l-slate-400">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase">Forecast</p>
-                    <p id="k-fcst" class="text-xl font-black text-slate-800">0</p>
-                </div>
-                <div class="kpi-card border-l-emerald-500">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase">Var R$</p>
-                    <p id="k-vrs" class="text-xl font-black">0</p>
-                </div>
-                <div class="kpi-card border-l-emerald-500">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase">Var %</p>
-                    <p id="k-vpt" class="text-xl font-black">0%</p>
-                </div>
-            </div>
-
-            <div class="panels-container">
-                <div class="panel">
-                    <div class="bg-slate-800 text-white text-[11px] font-bold p-2 text-center uppercase tracking-wider">Performance por LOB</div>
-                    <div class="table-wrapper">
-                        <div id="alert-lob" class="empty-state hidden">
-                            <p class="text-slate-400 font-bold text-[10px] uppercase">DADOS DISPONÍVEIS APÓS O FECHAMENTO</p>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="text-left w-[35%]">LOB</th>
-                                    <th class="text-right">Real</th>
-                                    <th class="text-right">Fcst</th>
-                                    <th class="text-right">Var R$</th>
-                                    <th class="text-right">Var %</th>
-                                </tr>
-                            </thead>
-                            <tbody id="body-lob"></tbody>
-                        </table>
-                    </div>
-                    <table class="row-total"><tr id="footer-lob"></tr></table>
-                </div>
-
-                <div class="panel">
-                    <div class="bg-slate-800 text-white text-[11px] font-bold p-2 text-center uppercase tracking-wider">Performance por Gestor</div>
-                    <div class="table-wrapper">
-                        <div id="alert-gestor" class="empty-state hidden">
-                            <p class="text-slate-400 font-bold text-[10px] uppercase">DADOS DISPONÍVEIS APÓS O FECHAMENTO</p>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="text-left w-[30%]">Gestor</th>
-                                    <th class="text-right">Real</th>
-                                    <th class="text-right">Fcst</th>
-                                    <th class="text-right">Var R$</th>
-                                    <th class="text-right">Var %</th>
-                                    <th class="text-center w-[45px]">TOP</th>
-                                </tr>
-                            </thead>
-                            <tbody id="body-gestor"></tbody>
-                        </table>
-                    </div>
-                    <table class="row-total"><tr id="footer-gestor"></tr></table>
-                </div>
-            </div>
-        </main>
-    </div>
-
     <script>
-        const dados = {
-            "JANEIRO": {
-                real: 31297537, fcst: 29256094,
-                lobs: [
-                    { n: "5020 - Bancos", r: 3779396, f: 4688774, s: "12.1%", vr: -909378, vp: "-19.4%" },
-                    { n: "5021 - PGM", r: 2617256, f: 2181798, s: "8.4%", vr: 435458, vp: "20.0%" },
-                    { n: "5022 - Mineração", r: 17020522, f: 14353762, s: "54.4%", vr: 2666760, vp: "18.6%" },
-                    { n: "5023 - Eletrônicos", r: 2809100, f: 2352613, s: "9.0%", vr: 456487, vp: "19.4%" },
-                    { n: "5024 - Cartões", r: 329344, f: 405122, s: "1.1%", vr: -75778, vp: "-18.7%" },
-                    { n: "5025 - Farma", r: 1857479, f: 2041786, s: "5.9%", vr: -184307, vp: "-9.0%" },
-                    { n: "5029 - Outros", r: 34775, f: 37191, s: "0.1%", vr: -2416, vp: "-6.5%" },
-                    { n: "5200 - Armazenagem", r: 122918, f: 129902, s: "0.4%", vr: -6984, vp: "-5.4%" },
-                    { n: "6000 - Joias", r: 1266971, f: 1508320, s: "4.0%", vr: -241349, vp: "-16.0%" },
-                    { n: "6220 - Luxo", r: 1459776, f: 1556826, s: "4.7%", vr: -97050, vp: "-6.2%" }
-                ],
-                gestores: [
-                    { n: "RICARDO", r: 16278436, f: 14140243, vr: 2138193, vp: "15.1%", top: [{c:"KINROSS GOLD", r:4377998, f:3850000},{c:"BRAZAURO", r:2307783, f:1000000},{c:"CASCAR BRASIL", r:1128133, f:300000},{c:"ASAHI REFINING", r:1095264, f:850000},{c:"SANTA LUZ", r:1037650, f:800000}]},
-                    { n: "PAULA", r: 5229564, f: 4646409, vr: 583155, vp: "12.6%", top: [{c:"COIMPA INDUSTRIAL", r:3015839, f:2252814},{c:"OURIBANK SA", r:847128, f:309500},{c:"MOTOROLA MOBILITY", r:431922, f:483444},{c:"COMPAL TECNOLOGIA", r:170033, f:120427},{c:"BANCO RENDIMENTO", r:110673, f:60500}]},
-                    { n: "F. PELLEGRINI", r: 2681201, f: 3414975, vr: -733774, vp: "-21.5%", top: [{c:"TRAVELEX", r:986716, f:1176491},{c:"DAYCOVAL SA", r:725741, f:873851},{c:"OURIBANK SA", r:509988, f:411177},{c:"WESTERN UNION", r:279879, f:385474},{c:"RENDIMENTO SA", r:120461, f:77064}]},
-                    { n: "MARINA", r: 2551343, f: 2803179, vr: -251836, vp: "-9.0%", top: [{c:"TELLERINA", r:1102455, f:576300},{c:"135 - BRINKS GLOBAL", r:566423, f:787314},{c:"CONIPA", r:239140, f:338915},{c:"CIDADE MARAVILHOSA", r:190790, f:285242},{c:"RELOGIOS ROLEX", r:108283, f:83284}]},
-                    { n: "JULIANA", r: 2002163, f: 1447773, vr: 554390, vp: "38.3%", top: [{c:"KUEHNENAGEL", r:1137897, f:300000},{c:"TELEFONICA BRASIL", r:588742, f:354939},{c:"MAGAZINE LUIZA", r:123472, f:296044},{c:"DHL GLOBAL", r:70256, f:74108},{c:"COMEXPORT", r:43243, f:0}]},
-                    { n: "FERNANDA", r: 1857479, f: 2041786, vr: -184307, vp: "-9.0%", top: [{c:"ONCO PROD", r:1201652, f:668936},{c:"MERCK SHARP DOHME", r:574077, f:608734},{c:"FARMA LOGISTICA", r:59038, f:265335},{c:"AMGEN BIOTECNOLOGIA", r:22339, f:0},{c:"WORLD COURIER", r:372, f:0}]},
-                    { n: "MARIELLA", r: 543245, f: 517396, vr: 25849, vp: "5.0%", top: [{c:"IDEMIA DO BRASIL", r:155333, f:104777},{c:"JUST TIME", r:94534, f:21425},{c:"135 - BRINKS GLOBAL", r:82083, f:263172},{c:"THALES", r:63201, f:0},{c:"GIESECKEDEVRIENT", r:27654, f:0}]},
-                    { n: "FILIPE COELHO", r: 87705, f: 240326, vr: -152621, vp: "-63.5%", top: [{c:"BANCO CENTRAL", r:87705, f:240326}]},
-                    { n: "AFFILIATES", r: 66401, f: 4006, vr: 62395, vp: "100%", top: [{c:"BGS AGENCIAMENTO", r:80152, f:0},{c:"BRINKS SEGURANCA", r:649, f:0}]}
-                ]
-            }
+        const fmt = (v) => Math.round(v).toLocaleString('pt-BR');
+        const metaAnualTotal = 365593723;
+
+        // Dados extraídos das imagens fornecidas
+        const budgetLOB = {
+            "JAN": {"5020 - Bancos": 4747555, "5021 - PGM": 2209150, "5022 - Mineração": 13738770, "5023 - Eletrônicos": 2748587, "5024 - Cartões": 405122, "5025 - Farma": 2072462, "5029 - Agro": 37191, "5200 - Armazenagem": 129902, "6000 - Joias": 1527229, "6220 - Luxo": 1640125},
+            "FEV": {"5020 - Bancos": 3890592, "5021 - PGM": 2238319, "5022 - Mineração": 11820540, "5023 - Eletrônicos": 3152172, "5024 - Cartões": 281968, "5025 - Farma": 2205679, "5029 - Agro": 40591, "5200 - Armazenagem": 45095, "6000 - Joias": 2078395, "6220 - Luxo": 1608520},
+            "MAR": {"5020 - Bancos": 3991180, "5021 - PGM": 2473205, "5022 - Mineração": 14304163, "5023 - Eletrônicos": 4332109, "5024 - Cartões": 344919, "5025 - Farma": 2554802, "5029 - Agro": 27674, "5200 - Armazenagem": 64358, "6000 - Joias": 1748750, "6220 - Luxo": 1742198},
+            "ABR": {"5020 - Bancos": 3865992, "5021 - PGM": 2431920, "5022 - Mineração": 13501404, "5023 - Eletrônicos": 2903459, "5024 - Cartões": 360426, "5025 - Farma": 2531910, "5029 - Agro": 26013, "5200 - Armazenagem": 52938, "6000 - Joias": 1777612, "6220 - Luxo": 2024805},
+            "MAI": {"5020 - Bancos": 4430421, "5021 - PGM": 2370921, "5022 - Mineração": 13646418, "5023 - Eletrônicos": 3417449, "5024 - Cartões": 363111, "5025 - Farma": 2506511, "5029 - Agro": 25481, "5200 - Armazenagem": 96768, "6000 - Joias": 1553486, "6220 - Luxo": 1972049},
+            "JUN": {"5020 - Bancos": 4453163, "5021 - PGM": 2002798, "5022 - Mineração": 14170346, "5023 - Eletrônicos": 3682758, "5024 - Cartões": 261756, "5025 - Farma": 2698006, "5029 - Agro": 32818, "5200 - Armazenagem": 118053, "6000 - Joias": 1627623, "6220 - Luxo": 1799102},
+            "JUL": {"5020 - Bancos": 4655942, "5021 - PGM": 2345894, "5022 - Mineração": 13762929, "5023 - Eletrônicos": 3022523, "5024 - Cartões": 440342, "5025 - Farma": 2399155, "5029 - Agro": 21940, "5200 - Armazenagem": 85450, "6000 - Joias": 1835958, "6220 - Luxo": 1893423},
+            "AGO": {"5020 - Bancos": 3955880, "5021 - PGM": 2024209, "5022 - Mineração": 14213009, "5023 - Eletrônicos": 2916383, "5024 - Cartões": 335606, "5025 - Farma": 2594758, "5029 - Agro": 62393, "5200 - Armazenagem": 27476, "6000 - Joias": 1886970, "6220 - Luxo": 1820458},
+            "SET": {"5020 - Bancos": 3955880, "5021 - PGM": 2055221, "5022 - Mineração": 15544247, "5023 - Eletrônicos": 3490612, "5024 - Cartões": 335606, "5025 - Farma": 2802161, "5029 - Agro": 62190, "5200 - Armazenagem": 43408, "6000 - Joias": 1939349, "6220 - Luxo": 2026585},
+            "OUT": {"5020 - Bancos": 3955880, "5021 - PGM": 2225195, "5022 - Mineração": 15147724, "5023 - Eletrônicos": 4143945, "5024 - Cartões": 335606, "5025 - Farma": 2849119, "5029 - Agro": 62394, "5200 - Armazenagem": 27486, "6000 - Joias": 2251089, "6220 - Luxo": 1921400},
+            "NOV": {"5020 - Bancos": 3839191, "5021 - PGM": 2159386, "5022 - Mineração": 15361584, "5023 - Eletrônicos": 4176958, "5024 - Cartões": 513853, "5025 - Farma": 2670642, "5029 - Agro": 60328, "5200 - Armazenagem": 34301, "6000 - Joias": 2129025, "6220 - Luxo": 1814305},
+            "DEZ": {"5020 - Bancos": 3834227, "5021 - PGM": 1793115, "5022 - Mineração": 15770707, "5023 - Eletrônicos": 2943786, "5024 - Cartões": 326843, "5025 - Farma": 2805236, "5029 - Agro": 60447, "5200 - Armazenagem": 26628, "6000 - Joias": 2007205, "6220 - Luxo": 1828531},
+            "CONSOLIDADO": {"5020 - Bancos": 48334223, "5021 - PGM": 26127346, "5022 - Mineração": 168347112, "5023 - Eletrônicos": 41597545, "5024 - Cartões": 4354349, "5025 - Farma": 31299127, "5029 - Agro": 498077, "5200 - Armazenagem": 785195, "6000 - Joias": 21905972, "6220 - Luxo": 22344777}
         };
 
-        const fNum = (v) => Math.round(v).toLocaleString('pt-BR');
-        const getCorVar = (val) => val >= 0 ? 'text-emerald-500' : 'text-red-500';
+        const budgetGST = {
+            "JAN": {"FERNANDA": 2072462, "JULIANA": 1843747, "MARIELLA MENDOZA": 580957, "MARINA": 2841827, "PAULA": 4809774, "RICARDO": 13525251},
+            "FEV": {"FERNANDA": 2205679, "JULIANA": 1726956, "MARIELLA MENDOZA": 765690, "MARINA": 3133979, "PAULA": 4675453, "RICARDO": 11613272},
+            "CONSOLIDADO": {"FERNANDA": 30690330, "JULIANA": 24492051, "MARIELLA MENDOZA": 8874261, "MARINA": 38558069, "PAULA": 58437400, "RICARDO": 166504240}
+        };
 
-        function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
+        const realizadoLOB_JAN = {"5020 - Bancos": 3779396, "5021 - PGM": 2617256, "5022 - Mineração": 17020522, "5023 - Eletrônicos": 2809100, "5024 - Cartões": 329344, "5025 - Farma": 1857479, "5029 - Agro": 34775, "5200 - Armazenagem": 122918, "6000 - Joias": 1266971, "6220 - Luxo": 1459776};
+        const realizadoGST_JAN = {"FERNANDA": 1857479, "JULIANA": 2002163, "MARIELLA MENDOZA": 543245, "MARINA": 2551343, "PAULA": 5229564, "RICARDO": 16278436};
 
-        function abrirTop5(nome, mes) {
-            if (!dados[mes]) return;
-            const g = dados[mes].gestores.find(i => i.n === nome);
-            if (!g) return;
-            document.getElementById('m-titulo').innerText = `TOP CLIENTES - ${nome}`;
-            document.getElementById('m-head').innerHTML = `<tr class="text-slate-400 text-[11px] border-b"><th class="text-left py-2 w-[30%]">CLIENTE</th><th class="text-right">REAL</th><th class="text-right">FCST</th><th class="text-right">VAR R$</th><th class="text-right">VAR %</th><th class="text-right">SHARE</th></tr>`;
-            document.getElementById('m-lista').innerHTML = g.top.map(c => {
-                const vr = c.r - c.f;
-                const vp = c.f > 0 ? ((c.r/c.f-1)*100).toFixed(1) + '%' : '100%';
-                return `<tr class="border-b text-[11px] hover:bg-slate-50"><td class="font-bold py-2">${c.c}</td><td class="text-right font-semibold">${fNum(c.r)}</td><td class="text-right text-slate-400">${fNum(c.f)}</td><td class="text-right font-semibold ${getCorVar(vr)}">${vr > 0 ? '+' : ''}${fNum(vr)}</td><td class="text-right ${getCorVar(vr)} font-bold">${vp}</td><td class="text-right font-black text-slate-700">${((c.r/g.r)*100).toFixed(1)}%</td></tr>`
-            }).join('');
-            document.getElementById('modal').classList.remove('hidden');
+        function changeView(v) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(v === 'CONSOLIDADO' ? 'btn-CONSOLIDADO' : 'btn-' + v);
+            if(btn) btn.classList.add('active');
+
+            const isC = v === 'CONSOLIDADO';
+            const isJan = v === 'JAN';
+            const hasRealData = isJan || isC;
+
+            // Se for mês futuro (não JAN e não Consolidado), usa "BUDGET"
+            const term = (isJan) ? "FCST" : (isC ? "META ANUAL" : "BUDGET");
+            
+            document.getElementById('msg-lob').classList.toggle('hidden', hasRealData);
+            document.getElementById('msg-gst').classList.toggle('hidden', hasRealData);
+
+            document.getElementById('label-r').innerText = isC ? "REALIZADO YTD" : "REALIZADO MÊS";
+            document.getElementById('label-m').innerText = term + (isC ? " 2026" : " MÊS");
+            document.getElementById('th-m-lob').innerText = term;
+            document.getElementById('th-m-gst').innerText = term;
+
+            const bL = budgetLOB[v] || budgetLOB["JAN"];
+            const bG = budgetGST[v] || budgetGST["JAN"];
+            
+            let tR = 0, tM = 0;
+
+            const processRows = (data, isGestor) => {
+                let html = "";
+                const realMap = isGestor ? realizadoGST_JAN : realizadoLOB_JAN;
+
+                Object.keys(data).forEach(k => {
+                    let m = data[k];
+                    let r = hasRealData ? (realMap[k] || 0) : 0;
+                    let vr = r - m;
+                    let vp = m > 0 ? (r/m - 1) * 100 : 0;
+                    
+                    if(!isGestor) { tR += r; tM += m; }
+                    html += `<tr>
+                        <td class="col-nome">${k}</td>
+                        <td>${fmt(r)}</td>
+                        <td>${fmt(m)}</td>
+                        <td class="${vr<0?'neg':'pos'}">${vr >= 0 ? '+' : ''}${fmt(vr)}</td>
+                        <td class="${vp<0?'neg':'pos'}">${vp >= 0 ? '+' : ''}${Math.round(vp)}%</td>
+                    </tr>`;
+                });
+                return html;
+            };
+
+            document.getElementById('body-lob').innerHTML = processRows(bL, false);
+            const totalR = tR; const totalM = tM;
+            document.getElementById('body-gst').innerHTML = processRows(bG, true);
+
+            const varR = totalR - totalM;
+            const varP = totalM > 0 ? (totalR/totalM - 1) * 100 : 0;
+
+            document.getElementById('foot-lob').innerHTML = `<tr><td class="col-nome text-white">TOTAL GERAL BGS</td><td>${fmt(totalR)}</td><td>${fmt(totalM)}</td><td class="${varR<0?'text-red-400':'text-emerald-400'}">${varR >= 0 ? '+' : ''}${fmt(varR)}</td><td class="${varP<0?'text-red-400':'text-emerald-400'}">${varP >= 0 ? '+' : ''}${Math.round(varP)}%</td></tr>`;
+
+            document.getElementById('val-r').innerText = "R$ " + fmt(totalR);
+            document.getElementById('val-m').innerText = "R$ " + fmt(totalM);
+            document.getElementById('val-vr').innerText = (varR >= 0 ? "+R$ " : "R$ ") + fmt(varR);
+            document.getElementById('val-vp').innerText = (varP >= 0 ? "+" : "") + Math.round(varP) + "%";
+            document.getElementById('val-vp').className = "kpi-value " + (varP < 0 ? "neg" : "pos");
+
+            const realJan = 31297537;
+            const perc = (realJan / metaAnualTotal) * 100;
+            document.getElementById('prog-p').innerText = perc.toFixed(1) + "%";
+            document.getElementById('prog-b').style.width = perc + "%";
         }
 
-        function render(mes) {
-            document.getElementById('status-mes').innerText = mes;
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.mes === mes));
-
-            const d = dados[mes];
-            const alertLob = document.getElementById('alert-lob');
-            const alertGestor = document.getElementById('alert-gestor');
-
-            if (!d) {
-                alertLob.classList.remove('hidden');
-                alertGestor.classList.remove('hidden');
-                document.getElementById('k-real').innerText = "0";
-                document.getElementById('k-fcst').innerText = "0";
-                document.getElementById('k-vrs').innerText = "0";
-                document.getElementById('k-vpt').innerText = "0%";
-                document.getElementById('body-lob').innerHTML = "";
-                document.getElementById('body-gestor').innerHTML = "";
-                document.getElementById('share-bar').innerHTML = "";
-                document.getElementById('footer-lob').innerHTML = "";
-                document.getElementById('footer-gestor').innerHTML = "";
-                return;
-            }
-
-            alertLob.classList.add('hidden');
-            alertGestor.classList.add('hidden');
-
-            const varTotal = d.real - d.fcst;
-            const corDinamica = getCorVar(varTotal);
-            
-            document.getElementById('k-real').innerText = fNum(d.real);
-            document.getElementById('k-fcst').innerText = fNum(d.fcst);
-            document.getElementById('k-vrs').innerText = (varTotal > 0 ? "+ " : "") + fNum(varTotal);
-            document.getElementById('k-vpt').innerText = "7.0%";
-            
-            document.getElementById('k-vrs').className = `text-xl font-black ${corDinamica}`;
-            document.getElementById('k-vpt').className = `text-xl font-black ${corDinamica}`;
-
-            const shares = [...d.lobs].sort((a, b) => parseFloat(b.s) - parseFloat(a.s));
-            document.getElementById('share-bar').innerHTML = shares.map(l => {
-                const pct = parseFloat(l.s);
-                const nome = l.n.includes('-') ? l.n.split('-')[1].trim() : l.n;
-                return `<div class="share-item"><div class="flex justify-between items-center"><span class="text-[9px] font-black">${l.s}</span><div class="w-10 h-1 bg-slate-100 rounded-full overflow-hidden"><div class="bg-slate-800 h-full" style="width:${pct}%"></div></div></div><p class="text-[8.5px] text-slate-500 font-bold truncate uppercase">${nome}</p></div>`
-            }).join('');
-
-            document.getElementById('body-lob').innerHTML = d.lobs.map(l => `<tr><td class="font-bold text-slate-600">${l.n}</td><td class="text-right">${fNum(l.r)}</td><td class="text-right text-slate-400">${fNum(l.f)}</td><td class="text-right font-semibold ${getCorVar(l.vr)}">${l.vr > 0 ? '+' : ''}${fNum(l.vr)}</td><td class="text-right ${getCorVar(l.vr)} font-bold">${l.vp}</td></tr>`).join('');
-            document.getElementById('body-gestor').innerHTML = d.gestores.map(g => `<tr><td class="font-bold text-slate-600">${g.n}</td><td class="text-right">${fNum(g.r)}</td><td class="text-right text-slate-400">${fNum(g.f)}</td><td class="text-right font-semibold ${getCorVar(g.vr)}">${g.vr > 0 ? '+' : ''}${fNum(g.vr)}</td><td class="text-right ${getCorVar(g.vr)} font-bold">${g.vp}</td><td class="text-center"><button onclick="abrirTop5('${g.n}', '${mes}')" class="bg-slate-800 text-white text-[8px] px-2 py-0.5 rounded uppercase font-bold">VER</button></td></tr>`).join('');
-
-            const footer = `<td class="text-left">TOTAL</td><td class="text-right">${fNum(d.real)}</td><td class="text-right">${fNum(d.fcst)}</td><td class="text-right">${varTotal > 0 ? '+' : ''}${fNum(varTotal)}</td><td class="text-right">7.0%</td>`;
-            document.getElementById('footer-lob').innerHTML = footer;
-            document.getElementById('footer-gestor').innerHTML = footer + `<td></td>`;
-        }
-
-        const mShort = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
-        const mFull = ["JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"];
         const nav = document.getElementById('nav-meses');
-        mShort.forEach((m, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'nav-btn'; btn.innerText = m; btn.dataset.mes = mFull[i];
-            btn.onclick = () => render(mFull[i]);
-            nav.appendChild(btn);
+        ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"].forEach(m => {
+            let btn = document.createElement('button');
+            btn.id = "btn-" + m; btn.className = "nav-btn"; btn.innerText = m;
+            btn.onclick = () => changeView(m); nav.appendChild(btn);
         });
 
-        render("JANEIRO");
+        changeView('JAN');
     </script>
 </body>
 </html>
