@@ -7,13 +7,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: #f1f5f9; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; padding: 0.5rem; display: flex; flex-direction: column; }
-        .table-container { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background: #1e293b; color: white; text-transform: uppercase; padding: 6px 4px; text-align: right; font-size: 7px; font-weight: 700; position: sticky; top: 0; }
-        td { padding: 4px 8px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700; font-size: 8px; color: #334155; }
+        .table-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        th { background: #1e293b; color: white; text-transform: uppercase; padding: 6px 4px; text-align: right; font-size: 7px; font-weight: 700; position: sticky; top: 0; z-index: 10; }
+        td { padding: 4px 6px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700; font-size: 8px; color: #334155; white-space: nowrap; }
         .section-header { background: #1e293b; color: white; text-transform: uppercase; font-weight: 900; font-size: 8px; padding: 6px 0; text-align: center; border-radius: 8px 8px 0 0; }
         tfoot tr td { background: #1e293b !important; color: white !important; font-weight: 900; text-transform: uppercase; font-size: 8px; padding: 6px; }
-        .col-nome { text-align: left; font-weight: 800; color: #1e293b; width: 42%; padding-left: 10px; font-size: 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .col-nome { text-align: left; font-weight: 800; color: #1e293b; padding-left: 8px; font-size: 7.5px; }
         .nav-btn { padding: 3px 7px; border-radius: 4px; font-size: 9px; font-weight: 800; background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
         .nav-btn.active { background: #1e293b !important; color: white !important; border-color: #1e293b; }
         .status-badge { font-size: 7px; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: 900; }
@@ -23,7 +23,6 @@
         .pos { color: #10b981 !important; }
         .share-item { border-left-width: 3px; padding: 4px 6px; margin-bottom: 2px; }
         .share-text-main { font-size: 8px; line-height: 1; }
-        .share-text-sub { font-size: 6px; }
     </style>
 </head>
 <body>
@@ -81,18 +80,17 @@
                     </div>
                 </div>
                 <div class="col-span-4 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
-                    <div class="section-header">Performance por Gestor</div>
+                    <div class="section-header">Top 10 Clientes (Realizado)</div>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th class="text-left pl-4">Gestor</th><th>Real</th><th>FCST</th><th>Var R$</th><th class="pr-2">Var %</th></tr></thead>
-                            <tbody id="b-gst"></tbody>
-                            <tfoot id="f-gst"></tfoot>
+                            <thead><tr><th class="text-left pl-4">Cliente</th><th>Real</th><th>FCST</th><th>Var R$</th><th class="pr-2">Var %</th></tr></thead>
+                            <tbody id="b-cli"></tbody>
                         </table>
                     </div>
                 </div>
                 <div class="col-span-3 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
                     <div class="section-header italic">Share por LOB (Realizado)</div>
-                    <div id="b-share" class="p-1.5 overflow-hidden h-full"></div>
+                    <div id="b-share" class="p-1.5 overflow-y-auto h-full"></div>
                 </div>
             </div>
         </div>
@@ -122,9 +120,21 @@
         const fmt = (v) => (v === 0 || isNaN(v) || v === null) ? "-" : Math.round(v).toLocaleString('pt-BR');
         
         const db = {
-            "CONSOLIDADO": { ytd: 59781711, real: 59781711, fcst: 56617964, lobs: { "5020 - Banknotes": [7274181, 8520585], "5021 - PGM": [5370546, 4392765], "5022 - Mineração": [30028418, 26765936], "5023 - Eletrônicos": [6343455, 5132169], "5024 - C&D": [700780, 687090], "5025 - Farma": [4024247, 4216789], "5029 - Outros": [43583, 77782], "5200 - Armazenagem": [255713, 174997], "6000 - Joias": [2535865, 3567805], "6220 - Luxu": [2604922, 3082046] }, gestores: { "RICARDO": [29404637, 26345149], "PAULA": [10913203, 9134167], "MARINA": [4696264, 5895111], "JULIANA": [4075784, 2802113], "FERNANDA": [4024247, 4216789], "MARIELLA": [1169765, 1222924] } },
-            "JAN": { ytd: 31297538, real: 31297538, fcst: 29256093, lobs: { "5020 - Banknotes": [3779396, 4688774], "5021 - PGM": [2617256, 2181798], "5022 - Mineração": [17020522, 14353762], "5023 - Eletrônicos": [2809100, 2352613], "5024 - C&D": [329344, 405122], "5025 - Farma": [1857479, 2041786], "5029 - Outros": [34775, 37191], "5200 - Armazenagem": [122918, 129902], "6000 - Joias": [1266971, 1508320], "6220 - Luxu": [1459776, 1556826] }, gestores: { "RICARDO": [16278436, 14140243], "PAULA": [5229564, 4646409], "MARINA": [2551343, 2803179], "JULIANA": [2002163, 1447773], "FERNANDA": [1857479, 2041786], "MARIELLA": [543245, 517396] } },
-            "FEV": { ytd: 59781711, real: 28484173, fcst: 27361871, lobs: { "5020 - Banknotes": [3494785, 3831811], "5021 - PGM": [2753290, 2210967], "5022 - Mineração": [13007896, 12412174], "5023 - Eletrônicos": [3534355, 2779556], "5024 - C&D": [371436, 281968], "5025 - Farma": [2166768, 2175003], "5029 - Outros": [8808, 40591], "5200 - Armazenagem": [132795, 45095], "6000 - Joias": [1268894, 2059485], "6220 - Luxu": [1145146, 1525220] }, gestores: { "RICARDO": [13126201, 12204906], "PAULA": [5683639, 4487758], "MARINA": [2144921, 3091932], "JULIANA": [2073621, 1354340], "FERNANDA": [2166768, 2175003], "MARIELLA": [626520, 705528] } }
+            "JAN": { 
+                ytd: 31297538, real: 31297538, fcst: 29256093, 
+                lobs: { "5020": [3779396, 4688774], "5021": [2617256, 2181798], "5022": [17020522, 14353762], "5023": [2809100, 2352613], "5024": [329344, 405122], "5025": [1857479, 2041786], "5029": [34775, 37191], "5200": [122918, 129902], "6000": [1277913, 1508320], "6220": [1448834, 1556826] },
+                clientes: { "KINROSS": [4377998, 3850000], "COIMPA": [3029497, 2442814], "BRAZAURO": [2307783, 1000000], "OURIBANK": [1375712, 721677], "ONCO PROD": [1201652, 668936], "KUEHNENAGEL": [1137897, 300000], "CASCAR": [1128133, 300000], "ASAHI": [1095264, 850000], "SANTA LUZ": [1037650, 800000], "135 - BRINKS": [1010913, 1511937] }
+            },
+            "FEV": { 
+                ytd: 59781711, real: 28484173, fcst: 27361871, 
+                lobs: { "5020": [3494785, 3831811], "5021": [2753290, 2210967], "5022": [13607896, 12412174], "5023": [3534355, 2779556], "5024": [371436, 281968], "5025": [2166768, 2175003], "5029": [8808, 40591], "5200": [132795, 45095], "6000": [1268894, 2059485], "6220": [1145146, 1525220] },
+                clientes: { "KINROSS": [3607222, 2300000], "COIMPA": [2881191, 2392495], "ONCO PROD": [1485734, 1094631], "SANTA LUZ": [1449544, 800000], "KUEHNENAGEL": [1260337, 200000], "BRAZAURO": [1144973, 800000], "CASCAR": [1122957, 300000], "135 - BRINKS": [1121504, 906306], "MOTOROLA": [1003952, 839032], "ASAHI": [893637, 700000] }
+            },
+            "CONSOLIDADO": {
+                ytd: 59781711, real: 59781711, fcst: 56617964,
+                lobs: { "5020": [7274181, 8520585], "5021": [5370546, 4392765], "5022": [30628418, 26765936], "5023": [6343455, 5132169], "5024": [700780, 687090], "5025": [4024247, 4216789], "5029": [43583, 77782], "5200": [255713, 174997], "6000": [2546807, 3567805], "6220": [2593980, 3082046] },
+                clientes: { "KINROSS": [7985220, 6150000], "COIMPA": [5910688, 4835309], "BRAZAURO": [3452756, 1800000], "ONCO PROD": [2687386, 1763567], "SANTA LUZ": [2487194, 1600000], "KUEHNENAGEL": [2398234, 500000], "CASCAR": [2251091, 600000], "135 - BRINKS": [2132417, 2418243], "ASAHI": [1988901, 1550000], "MOTOROLA": [1435874, 839032] }
+            }
         };
 
         const pddData = [
@@ -136,17 +146,12 @@
         ];
 
         function togglePDD() {
-            const vReceita = document.getElementById('view-receita');
-            const vPDD = document.getElementById('view-pdd');
-            const btnPDD = document.getElementById('btn-pdd-toggle');
+            const vReceita = document.getElementById('view-receita'), vPDD = document.getElementById('view-pdd'), btnPDD = document.getElementById('btn-pdd-toggle');
             if (vPDD.classList.contains('hidden')) {
-                vReceita.classList.add('hidden');
-                vPDD.classList.remove('hidden');
-                btnPDD.innerText = "Ver Dashboard";
-                renderPDD();
+                vReceita.classList.add('hidden'); vPDD.classList.remove('hidden');
+                btnPDD.innerText = "Ver Dashboard"; renderPDD();
             } else {
-                vPDD.classList.add('hidden');
-                vReceita.classList.remove('hidden');
+                vPDD.classList.add('hidden'); vReceita.classList.remove('hidden');
                 btnPDD.innerText = "Painel PDD";
             }
         }
@@ -162,55 +167,56 @@
         }
 
         function switchMes(mes, btn) {
-            // Se clicar em um mês estando no PDD, volta para tela de Receita
-            if (!document.getElementById('view-pdd').classList.contains('hidden')) {
-                togglePDD();
-            }
-
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            if (!db[mes]) {
-                const empty = `
-                    <div class="flex flex-col items-center justify-center h-full w-full py-16 opacity-40">
-                        <div class="text-[24px] mb-2">⏳</div>
-                        <div class="text-[9px] font-black uppercase text-slate-500 tracking-widest text-center">Aguardando Fechamento</div>
-                    </div>`;
+            document.getElementById('view-receita').classList.remove('hidden');
+            document.getElementById('view-pdd').classList.add('hidden');
+            document.getElementById('btn-pdd-toggle').innerText = "Painel PDD";
 
+            if (!db[mes]) {
+                const empty = `<div class="flex flex-col items-center justify-center h-full w-full py-16 opacity-40"><div class="text-[24px] mb-2">⏳</div><div class="text-[9px] font-black uppercase text-slate-500 tracking-widest text-center">Dados serão divulgados<br>após fechamento do período</div></div>`;
                 document.getElementById('b-lob').innerHTML = `<tr><td colspan="5">${empty}</td></tr>`;
                 document.getElementById('f-lob').innerHTML = "";
-                document.getElementById('b-gst').innerHTML = `<tr><td colspan="5">${empty}</td></tr>`;
-                document.getElementById('f-gst').innerHTML = "";
+                document.getElementById('b-cli').innerHTML = `<tr><td colspan="5">${empty}</td></tr>`;
                 document.getElementById('b-share').innerHTML = empty;
-
-                ['k-real','k-fcst','k-var-rs','k-var-p'].forEach(id => document.getElementById(id).innerText = "-");
-                document.getElementById('ytd-perc').innerText = "-";
+                ['k-real','k-fcst','k-var-rs','k-var-p','ytd-perc'].forEach(id => document.getElementById(id).innerText = "-");
                 document.getElementById('ytd-bar').style.width = "0%";
                 document.getElementById('ytd-gap').innerText = "GAP: R$ -";
                 return;
             }
 
             const d = db[mes];
-            let hL = "", hG = "", hS = "";
+            let hL = "", hC = "", hS = "";
+            const lobLabels = { "5020":"Banknotes", "5021":"PGM", "5022":"Mineração", "5023":"Eletrônicos", "5024":"C&D", "5025":"Farma", "5029":"Outros", "5200":"Armazém", "6000":"Joias", "6220":"Luxu" };
             
-            Object.entries(d.lobs).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n, [r, f]]) => {
-                let v = r-f, p = f>0 ? Math.round((r/f-1)*100) : 0;
-                hL += `<tr><td class="col-nome">${n}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
-                hS += `<div class="bg-white border-l-4 border-slate-800 share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${n.split(' - ')[1] || n}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="share-text-sub text-slate-400 italic">R$ ${fmt(r)}</span></div></div>`;
+            // 1. Tabela LOB: Ordem Numérica (5020, 5021...)
+            Object.keys(d.lobs).sort().forEach(code => {
+                const [r, f] = d.lobs[code];
+                let v = r - f, p = f > 0 ? Math.round((r / f - 1) * 100) : 0;
+                hL += `<tr><td class="col-nome">${code} - ${lobLabels[code]}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
             });
-            
-            Object.entries(d.gestores).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n, [r, f]]) => {
+
+            // 2. Painel Share: Ordem por Valor Realizado (Mais expressivo para menos)
+            Object.entries(d.lobs)
+                .sort((a, b) => b[1][0] - a[1][0]) // Ordena pelo Realizado (index 0 do array)
+                .forEach(([code, [r, f]]) => {
+                    if (r > 0) {
+                        hS += `<div class="bg-white border-l-4 border-slate-800 share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${lobLabels[code]}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic">R$ ${fmt(r)}</span></div></div>`;
+                    }
+                });
+
+            // 3. Clientes
+            Object.entries(d.clientes).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n, [r, f]]) => {
                 let v = r-f, p = f>0 ? Math.round((r/f-1)*100) : 0;
-                hG += `<tr><td class="col-nome">${n}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
+                hC += `<tr><td class="col-nome">${n}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
             });
 
             document.getElementById('b-lob').innerHTML = hL;
-            document.getElementById('b-gst').innerHTML = hG;
+            document.getElementById('b-cli').innerHTML = hC;
             document.getElementById('b-share').innerHTML = hS;
             
-            let vT = d.real-d.fcst;
+            let vT = d.real - d.fcst;
             document.getElementById('f-lob').innerHTML = `<tr><td class="text-left pl-4">TOTAL</td><td>${fmt(d.real)}</td><td>${fmt(d.fcst)}</td><td class="${vT<0?'text-red-400':'text-emerald-400'}">${fmt(vT)}</td><td class="pr-2">${Math.round((d.real/d.fcst-1)*100)}%</td></tr>`;
-            document.getElementById('f-gst').innerHTML = ""; // Faixa removida conforme solicitado
             
             document.getElementById('k-real').innerText = "R$ " + fmt(d.real);
             document.getElementById('k-fcst').innerText = "R$ " + fmt(d.fcst);
@@ -223,7 +229,6 @@
             document.getElementById('ytd-gap').innerText = "GAP: R$ " + fmt(META_ANUAL - d.ytd);
         }
 
-        // INIT NAV
         const nav = document.getElementById('nav-meses');
         const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ", "CONSOLIDADO"];
         meses.forEach(m => {
