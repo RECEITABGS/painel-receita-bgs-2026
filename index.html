@@ -2,197 +2,237 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Receita BGS 2026</title>
+    <title>Dashboard Comercial - Receita BGS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { background: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; padding: 0.4rem; display: flex; flex-direction: column; }
-        .table-container { overflow-y: auto; flex: 1; position: relative; scrollbar-width: none; }
-        .table-container::-webkit-scrollbar { display: none; }
+        body { background: #f1f5f9; color: #1e293b; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; padding: 0.5rem; display: flex; flex-direction: column; }
+        .table-container { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background: #ffffff; color: #64748b; text-transform: uppercase; padding: 4px 2px; border-bottom: 2px solid #e2e8f0; text-align: right; font-size: 7.5px; font-weight: 800; position: sticky; top: 0; z-index: 10; }
-        td { padding: 3px 4px; border-bottom: 1px solid #f1f5f9; text-align: right; font-weight: 700; font-size: 8.5px; }
-        .col-nome { text-align: left; font-weight: 800; color: #334155; width: 52%; padding-left: 6px; line-height: 1.1; font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        tfoot td { background: #1e293b; color: white; font-weight: 800; padding: 5px 4px; position: sticky; bottom: 0; font-size: 9px; }
-        .kpi-card { background: white; border-radius: 10px; padding: 8px 10px; border-top: 4px solid; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .kpi-title { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
-        .kpi-value { font-size: 1.1rem; font-weight: 900; line-height: 1; }
-        .nav-btn { padding: 3px 6px; border-radius: 4px; font-size: 9px; font-weight: 800; background: #e2e8f0; color: #475569; transition: all 0.2s; }
-        .nav-btn.active { background: #1e293b; color: white; }
+        th { background: #1e293b; color: white; text-transform: uppercase; padding: 6px 4px; text-align: right; font-size: 7px; font-weight: 700; position: sticky; top: 0; }
+        td { padding: 4px 8px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700; font-size: 8px; color: #334155; }
+        .section-header { background: #1e293b; color: white; text-transform: uppercase; font-weight: 900; font-size: 8px; padding: 6px 0; text-align: center; border-radius: 8px 8px 0 0; }
+        tfoot tr td { background: #1e293b !important; color: white !important; font-weight: 900; text-transform: uppercase; font-size: 8px; padding: 6px; }
+        .col-nome { text-align: left; font-weight: 800; color: #1e293b; width: 42%; padding-left: 10px; font-size: 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nav-btn { padding: 3px 7px; border-radius: 4px; font-size: 9px; font-weight: 800; background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+        .nav-btn.active { background: #1e293b !important; color: white !important; border-color: #1e293b; }
+        .status-badge { font-size: 7px; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: 900; }
+        .status-entrada { background: #fee2e2; color: #b91c1c; }
+        .status-reversao { background: #d1fae5; color: #047857; }
         .neg { color: #ef4444 !important; }
         .pos { color: #10b981 !important; }
-        .empty-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.9); color: #64748b; font-size: 10px; font-weight: 700; text-align: center; padding: 20px; z-index: 20; border-radius: 8px; }
+        .share-item { border-left-width: 3px; padding: 4px 6px; margin-bottom: 2px; }
+        .share-text-main { font-size: 8px; line-height: 1; }
+        .share-text-sub { font-size: 6px; }
     </style>
 </head>
 <body>
     <div class="flex flex-col gap-2 h-full">
-        <header class="flex items-center justify-between bg-white p-2 px-4 rounded-xl border border-slate-200 shrink-0 shadow-sm">
-            <div class="flex items-center gap-4">
-                <h1 class="text-xs font-black text-slate-900 italic uppercase tracking-tighter">Receita BGS 2026</h1>
+        <header class="flex items-center justify-between bg-white p-2 px-6 rounded-xl border border-slate-200 shadow-sm shrink-0">
+            <div class="flex items-center gap-2">
+                <h1 class="text-[11px] font-black text-slate-900 italic uppercase mr-2">Receita BGS 2026</h1>
                 <nav class="flex gap-1" id="nav-meses"></nav>
-                <button onclick="changeView('CONSOLIDADO')" id="btn-CONSOLIDADO" class="nav-btn uppercase ml-2">Consolidado (YTD)</button>
+                <div class="h-6 w-[1px] bg-slate-300 mx-1"></div>
+                <button id="btn-pdd-toggle" onclick="togglePDD()" class="bg-red-600 text-white px-3 py-1 rounded font-black text-[9px] uppercase hover:bg-red-700 transition">Painel PDD</button>
             </div>
-            <span class="text-[#00529B] font-black text-lg italic">BRINK'S</span>
+            <span class="text-[#00529B] font-black text-xl italic tracking-tighter">BRINK'S</span>
         </header>
 
-        <div id="kpi-grid" class="grid grid-cols-5 gap-2 shrink-0">
-            <div class="kpi-card" style="border-top-color: #1e293b;"><p id="label-r" class="kpi-title text-slate-500">REALIZADO MÊS</p><p id="val-r" class="kpi-value text-slate-900">R$ 0</p></div>
-            <div class="kpi-card" style="border-top-color: #10b981; background-color: #f0fdf4;"><p id="label-m" class="kpi-title text-emerald-600">FCST MÊS</p><p id="val-m" class="kpi-value text-emerald-700">R$ 0</p></div>
-            <div class="kpi-card" style="border-top-color: #f59e0b; background-color: #fffbeb;"><p id="label-vr" class="kpi-title text-amber-600">VAR R$</p><p id="val-vr" class="kpi-value">R$ 0</p></div>
-            <div class="kpi-card" style="border-top-color: #3b82f6; background-color: #eff6ff;"><p id="label-vp" class="kpi-title text-blue-600">VAR %</p><p id="val-vp" class="kpi-value">0%</p></div>
-            <div class="kpi-card" style="border-top-color: #6366f1; background-color: #f5f3ff;">
-                <div class="flex justify-between items-start">
-                    <div><p class="kpi-title text-indigo-600">ATING. META ANUAL</p><p class="text-[7px] font-bold text-slate-400">META: R$ 365.593.723</p></div>
-                    <p id="prog-p" class="font-black text-indigo-700 text-sm">8.6%</p>
+        <div id="view-receita" class="flex flex-col gap-2 flex-1 min-h-0">
+            <div class="grid grid-cols-5 gap-2 h-16 shrink-0">
+                <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-slate-800 shadow-sm flex flex-col justify-center">
+                    <p class="text-[7px] font-900 text-slate-500 uppercase">Realizado Mês</p>
+                    <p id="k-real" class="text-lg font-900">R$ -</p>
                 </div>
-                <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden"><div id="prog-b" class="bg-indigo-500 h-full" style="width: 8.6%;"></div></div>
+                <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm flex flex-col justify-center">
+                    <p class="text-[7px] font-900 text-emerald-600 uppercase">FCST Mês</p>
+                    <p id="k-fcst" class="text-lg font-900 text-emerald-700">R$ -</p>
+                </div>
+                <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm flex flex-col justify-center">
+                    <p class="text-[7px] font-900 text-emerald-600 uppercase">Var R$ (Mês)</p>
+                    <p id="k-var-rs" class="text-lg font-900 text-emerald-700">-</p>
+                </div>
+                <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm flex flex-col justify-center">
+                    <p class="text-[7px] font-900 text-emerald-600 uppercase">Var % (Mês)</p>
+                    <p id="k-var-p" class="text-lg font-900 text-emerald-700">-</p>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-2 border border-blue-200 border-t-4 border-t-blue-500 shadow-sm flex flex-col justify-center">
+                    <div class="flex justify-between items-start">
+                        <p class="text-[7px] font-900 text-blue-600 uppercase italic">Ating. Meta Anual (YTD)</p>
+                        <p id="ytd-perc" class="text-xs font-900 text-blue-800">-</p>
+                    </div>
+                    <div class="w-full h-1 bg-blue-200 rounded-full mt-1 overflow-hidden">
+                        <div id="ytd-bar" class="bg-blue-600 h-full" style="width: 0%"></div>
+                    </div>
+                    <p class="text-[6px] font-bold text-slate-400 mt-1 uppercase">META: R$ 365.593.723</p>
+                    <p id="ytd-gap" class="text-[6px] font-black text-blue-500 italic uppercase">GAP: R$ -</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-2 flex-1 min-h-0">
+                <div class="col-span-5 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
+                    <div class="section-header">Performance por LOB</div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th class="text-left pl-4">LOB</th><th>Real</th><th>FCST</th><th>Var R$</th><th class="pr-2">Var %</th></tr></thead>
+                            <tbody id="b-lob"></tbody>
+                            <tfoot id="f-lob"></tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-span-4 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
+                    <div class="section-header">Performance por Gestor</div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th class="text-left pl-4">Gestor</th><th>Real</th><th>FCST</th><th>Var R$</th><th class="pr-2">Var %</th></tr></thead>
+                            <tbody id="b-gst"></tbody>
+                            <tfoot id="f-gst"></tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-span-3 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
+                    <div class="section-header italic">Share por LOB (Realizado)</div>
+                    <div id="b-share" class="p-1.5 overflow-hidden h-full"></div>
+                </div>
             </div>
         </div>
 
-        <div class="relative flex-1 min-h-0">
-            <div id="main-content" class="grid grid-cols-2 gap-2 h-full">
-                <div class="bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm relative">
-                    <div class="bg-slate-800 text-white text-[8px] font-black py-1 text-center uppercase tracking-widest">Performance por LOB</div>
-                    <div class="table-container">
-                        <div id="msg-lob" class="empty-msg hidden">Dados serão divulgados após o fechamento do período</div>
-                        <table><thead><tr><th class="text-left pl-3">LOB</th><th>Real</th><th id="th-m-lob">FCST</th><th>Var R$</th><th class="pr-3">Var %</th></tr></thead><tbody id="body-lob"></tbody><tfoot id="foot-lob"></tfoot></table>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm relative">
-                    <div class="bg-slate-800 text-white text-[8px] font-black py-1 text-center uppercase tracking-widest">Performance por Gestor</div>
-                    <div class="table-container">
-                        <div id="msg-gst" class="empty-msg hidden">Dados serão divulgados após o fechamento do período</div>
-                        <table><thead><tr><th class="text-left pl-3">Gestor</th><th>Real</th><th id="th-m-gst">FCST</th><th>Var R$</th><th class="pr-3">Var %</th></tr></thead><tbody id="body-gst"></tbody></table>
-                    </div>
-                </div>
+        <div id="view-pdd" class="bg-white rounded-xl border border-slate-200 flex flex-col flex-1 min-h-0 overflow-hidden hidden shadow-sm">
+            <div class="section-header py-3 tracking-widest text-sm">Monitoramento PDD</div>
+            <div class="table-container overflow-y-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-left pl-4" style="width: 45%">Gestor / ORG / Razão Social</th>
+                            <th class="text-center" style="width: 10%">Situação</th>
+                            <th style="width: 15%">Jan/26</th>
+                            <th style="width: 15%">Fev/26</th>
+                            <th class="pr-4" style="width: 15%">Total Geral</th>
+                        </tr>
+                    </thead>
+                    <tbody id="b-pdd"></tbody>
+                    <tfoot id="f-pdd"></tfoot>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        const fmt = (v) => Math.round(v).toLocaleString('pt-BR');
-        const metaAnualTotal = 365593723;
-
-        const budgetLOB = {
-            "JAN": {"5020 - Bancos": 4747555, "5021 - PGM": 2209150, "5022 - Mineração": 13738770, "5023 - Eletrônicos": 2748587, "5024 - Cartões": 405122, "5025 - Farma": 2072462, "5029 - Agro": 37191, "5200 - Armazenagem": 129902, "6000 - Joias": 1527230, "6220 - Luxo": 1640125},
-            "FEV": {"5020 - Bancos": 3890592, "5021 - PGM": 2238319, "5022 - Mineração": 11820540, "5023 - Eletrônicos": 3152172, "5024 - Cartões": 281968, "5025 - Farma": 2205679, "5029 - Agro": 40591, "5200 - Armazenagem": 45095, "6000 - Joias": 2078395, "6220 - Luxo": 1608520},
-            "MAR": {"5020 - Bancos": 3991180, "5021 - PGM": 2473205, "5022 - Mineração": 14304163, "5023 - Eletrônicos": 4332109, "5024 - Cartões": 344919, "5025 - Farma": 2554802, "5029 - Agro": 27674, "5200 - Armazenagem": 64358, "6000 - Joias": 1748750, "6220 - Luxo": 1742198},
-            "ABR": {"5020 - Bancos": 3865992, "5021 - PGM": 2431920, "5022 - Mineração": 13501404, "5023 - Eletrônicos": 2903459, "5024 - Cartões": 360426, "5025 - Farma": 2531910, "5029 - Agro": 26013, "5200 - Armazenagem": 52938, "6000 - Joias": 1777612, "6220 - Luxo": 2024805},
-            "MAI": {"5020 - Bancos": 4430421, "5021 - PGM": 2370921, "5022 - Mineração": 13646418, "5023 - Eletrônicos": 3417449, "5024 - Cartões": 363111, "5025 - Farma": 2506511, "5029 - Agro": 25481, "5200 - Armazenagem": 96768, "6000 - Joias": 1553486, "6220 - Luxo": 1972049},
-            "JUN": {"5020 - Bancos": 4453163, "5021 - PGM": 2002798, "5022 - Mineração": 14170346, "5023 - Eletrônicos": 3682758, "5024 - Cartões": 261756, "5025 - Farma": 2698006, "5029 - Agro": 32818, "5200 - Armazenagem": 118053, "6000 - Joias": 1627623, "6220 - Luxo": 1799102},
-            "JUL": {"5020 - Bancos": 4655942, "5021 - PGM": 2345894, "5022 - Mineração": 13762929, "5023 - Eletrônicos": 3022523, "5024 - Cartões": 440342, "5025 - Farma": 2399155, "5029 - Agro": 21940, "5200 - Armazenagem": 85450, "6000 - Joias": 1835958, "6220 - Luxo": 1893423},
-            "AGO": {"5020 - Bancos": 3955880, "5021 - PGM": 2024209, "5022 - Mineração": 14213009, "5023 - Eletrônicos": 2916383, "5024 - Cartões": 335606, "5025 - Farma": 2594758, "5029 - Agro": 62393, "5200 - Armazenagem": 27476, "6000 - Joias": 1886970, "6220 - Luxo": 1820458},
-            "SET": {"5020 - Bancos": 3955880, "5021 - PGM": 2055221, "5022 - Mineração": 15544247, "5023 - Eletrônicos": 3490612, "5024 - Cartões": 335606, "5025 - Farma": 2802161, "5029 - Agro": 62190, "5200 - Armazenagem": 43408, "6000 - Joias": 1939349, "6220 - Luxo": 2026585},
-            "OUT": {"5020 - Bancos": 3955880, "5021 - PGM": 2225195, "5022 - Mineração": 15147724, "5023 - Eletrônicos": 4143945, "5024 - Cartões": 335606, "5025 - Farma": 2849119, "5029 - Agro": 62394, "5200 - Armazenagem": 27486, "6000 - Joias": 2251089, "6220 - Luxo": 1921400},
-            "NOV": {"5020 - Bancos": 3839191, "5021 - PGM": 2159386, "5022 - Mineração": 15361584, "5023 - Eletrônicos": 4176958, "5024 - Cartões": 513853, "5025 - Farma": 2670642, "5029 - Agro": 60328, "5200 - Armazenagem": 34301, "6000 - Joias": 2129025, "6220 - Luxo": 1814305},
-            "DEZ": {"5020 - Bancos": 3834227, "5021 - PGM": 1793115, "5022 - Mineração": 15770707, "5023 - Eletrônicos": 2943786, "5024 - Cartões": 326843, "5025 - Farma": 2805236, "5029 - Agro": 60447, "5200 - Armazenagem": 26628, "6000 - Joias": 2007205, "6220 - Luxo": 1828531},
-            "CONSOLIDADO": {"5020 - Bancos": 48334223, "5021 - PGM": 26127346, "5022 - Mineração": 168347112, "5023 - Eletrônicos": 41597545, "5024 - Cartões": 4354349, "5025 - Farma": 31299127, "5029 - Agro": 498077, "5200 - Armazenagem": 785195, "6000 - Joias": 21905972, "6220 - Luxo": 22344777}
+        const META_ANUAL = 365593723;
+        const fmt = (v) => (v === 0 || isNaN(v) || v === null) ? "-" : Math.round(v).toLocaleString('pt-BR');
+        
+        const db = {
+            "CONSOLIDADO": { ytd: 59781711, real: 59781711, fcst: 56617964, lobs: { "5020 - Banknotes": [7274181, 8520585], "5021 - PGM": [5370546, 4392765], "5022 - Mineração": [30028418, 26765936], "5023 - Eletrônicos": [6343455, 5132169], "5024 - C&D": [700780, 687090], "5025 - Farma": [4024247, 4216789], "5029 - Outros": [43583, 77782], "5200 - Armazenagem": [255713, 174997], "6000 - Joias": [2535865, 3567805], "6220 - Luxu": [2604922, 3082046] }, gestores: { "RICARDO": [29404637, 26345149], "PAULA": [10913203, 9134167], "MARINA": [4696264, 5895111], "JULIANA": [4075784, 2802113], "FERNANDA": [4024247, 4216789], "MARIELLA": [1169765, 1222924] } },
+            "JAN": { ytd: 31297538, real: 31297538, fcst: 29256093, lobs: { "5020 - Banknotes": [3779396, 4688774], "5021 - PGM": [2617256, 2181798], "5022 - Mineração": [17020522, 14353762], "5023 - Eletrônicos": [2809100, 2352613], "5024 - C&D": [329344, 405122], "5025 - Farma": [1857479, 2041786], "5029 - Outros": [34775, 37191], "5200 - Armazenagem": [122918, 129902], "6000 - Joias": [1266971, 1508320], "6220 - Luxu": [1459776, 1556826] }, gestores: { "RICARDO": [16278436, 14140243], "PAULA": [5229564, 4646409], "MARINA": [2551343, 2803179], "JULIANA": [2002163, 1447773], "FERNANDA": [1857479, 2041786], "MARIELLA": [543245, 517396] } },
+            "FEV": { ytd: 59781711, real: 28484173, fcst: 27361871, lobs: { "5020 - Banknotes": [3494785, 3831811], "5021 - PGM": [2753290, 2210967], "5022 - Mineração": [13007896, 12412174], "5023 - Eletrônicos": [3534355, 2779556], "5024 - C&D": [371436, 281968], "5025 - Farma": [2166768, 2175003], "5029 - Outros": [8808, 40591], "5200 - Armazenagem": [132795, 45095], "6000 - Joias": [1268894, 2059485], "6220 - Luxu": [1145146, 1525220] }, gestores: { "RICARDO": [13126201, 12204906], "PAULA": [5683639, 4487758], "MARINA": [2144921, 3091932], "JULIANA": [2073621, 1354340], "FERNANDA": [2166768, 2175003], "MARIELLA": [626520, 705528] } }
         };
 
-        const budgetGST = {
-            "JAN": {"AFFILIATE": 4006, "FELIPE PELLEGRINI": 3337744, "FERNANDA": 2072462, "FILIPE COELHO": 240326, "JULIANA": 1843747, "MARIELLA ": 580957, "MARINA": 2841827, "PAULA": 4809774, "RICARDO": 13525251},
-            "FEV": {"AFFILIATE": 5964, "FELIPE PELLEGRINI": 2994554, "FERNANDA": 2205679, "FILIPE COELHO": 240326, "JULIANA": 1726956, "MARIELLA ": 765690, "MARINA": 3133979, "PAULA": 4675453, "RICARDO": 11613272},
-            "MAR": {"FELIPE PELLEGRINI": 3017475, "FERNANDA": 2554802, "FILIPE COELHO": 240326, "JULIANA": 1910897, "MARIELLA ": 864758, "MARINA": 2910910, "PAULA": 5955984, "RICARDO": 14128207},
-            "ABR": {"FELIPE PELLEGRINI": 2986310, "FERNANDA": 2531910, "FILIPE COELHO": 240326, "JULIANA": 1860318, "MARIELLA ": 739234, "MARINA": 3262430, "PAULA": 4516999, "RICARDO": 13338951},
-            "MAI": {"FELIPE PELLEGRINI": 3541722, "FERNANDA": 2506511, "FILIPE COELHO": 240326, "JULIANA": 1831860, "MARIELLA ": 581036, "MARINA": 3175768, "PAULA": 5019944, "RICARDO": 13485450},
-            "JUN": {"FELIPE PELLEGRINI": 3037813, "FERNANDA": 2698006, "FILIPE COELHO": 240326, "JULIANA": 1828137, "MARIELLA ": 630198, "MARINA": 2909120, "PAULA": 5527375, "RICARDO": 13975450},
-            "JUL": {"FELIPE PELLEGRINI": 3738918, "FERNANDA": 2399155, "FILIPE COELHO": 240326, "JULIANA": 1810775, "MARIELLA ": 828648, "MARINA": 3179724, "PAULA": 4760559, "RICARDO": 13505450},
-            "AGO": {"FELIPE PELLEGRINI": 2928229, "FERNANDA": 2594758, "FILIPE COELHO": 240326, "JULIANA": 1855546, "MARIELLA ": 862751, "MARINA": 3085809, "PAULA": 4349274, "RICARDO": 13920450},
-            "SET": {"FELIPE PELLEGRINI": 2928229, "FERNANDA": 2802161, "FILIPE COELHO": 240326, "JULIANA": 2105808, "MARIELLA ": 796753, "MARINA": 3410883, "PAULA": 4735648, "RICARDO": 15235450},
-            "OUT": {"FELIPE PELLEGRINI": 2928229, "FERNANDA": 2849119, "FILIPE COELHO": 240326, "JULIANA": 3087475, "MARIELLA ": 723996, "MARINA": 3689534, "PAULA": 4550709, "RICARDO": 14850450},
-            "NOV": {"FELIPE PELLEGRINI": 2834878, "FERNANDA": 2670642, "FILIPE COELHO": 240326, "JULIANA": 2921687, "MARIELLA ": 789666, "MARINA": 3572878, "PAULA": 4677339, "RICARDO": 15052158},
-            "DEZ": {"FELIPE PELLEGRINI": 2830907, "FERNANDA": 2805236, "FILIPE COELHO": 240326, "JULIANA": 1542237, "MARIELLA ": 601382, "MARINA": 3466207, "PAULA": 4462130, "RICARDO": 15448301},
-            "CONSOLIDADO": {"FERNANDA": 30690330, "JULIANA": 24492051, "MARIELLA ": 8874261, "MARINA": 38558069, "PAULA": 58437400, "RICARDO": 166504240}
-        };
+        const pddData = [
+            { g: "MARINA HOEPERS", o: "BRI", r: "TELLERINA COMERCIO DE PRESENTES SA", s: "ENTRADA", j: 0, f: 99224 },
+            { g: "MARINA HOEPERS", o: "BSL", r: "TELLERINA COMERCIO DE PRESENTES SA", s: "ENTRADA", j: 0, f: 6412 },
+            { g: "MARINA HOEPERS", o: "BSL", r: "CIDADE MARAVILHOSA INDÚSTRIA SA", s: "ENTRADA", j: 0, f: 272 },
+            { g: "JULIANA SANTOS", o: "BRI", r: "TELEFONICA BRASIL SA", s: "ENTRADA", j: 68148, f: 370178 },
+            { g: "JULIANA SANTOS", o: "BRI", r: "DHL GLOBAL FORWARDING BRAZIL LTDA", s: "REVERSÃO", j: -197, f: 0 }
+        ];
 
-        const realizadoLOB_JAN = {"5020 - Bancos": 3779396, "5021 - PGM": 2617256, "5022 - Mineração": 17020522, "5023 - Eletrônicos": 2809100, "5024 - Cartões": 329344, "5025 - Farma": 1857479, "5029 - Agro": 34775, "5200 - Armazenagem": 122918, "6000 - Joias": 1266971, "6220 - Luxo": 1459776};
-        const realizadoGST_JAN = {"AFFILIATE": 0, "FELIPE PELLEGRINI": 3337744, "FERNANDA": 1857479, "FILIPE COELHO": 240326, "JULIANA": 2002163, "MARIELLA ": 543245, "MARINA": 2551343, "PAULA": 5229564, "RICARDO": 16278436};
-
-        function changeView(v) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(v === 'CONSOLIDADO' ? 'btn-CONSOLIDADO' : 'btn-' + v);
-            if(btn) btn.classList.add('active');
-
-            const isC = v === 'CONSOLIDADO';
-            const isJan = v === 'JAN';
-            const hasRealData = isJan || isC;
-            const term = (isJan) ? "FCST" : (isC ? "META ANUAL" : "BUDGET");
-            
-            document.getElementById('msg-lob').classList.toggle('hidden', hasRealData);
-            document.getElementById('msg-gst').classList.toggle('hidden', hasRealData);
-
-            document.getElementById('label-r').innerText = isC ? "REALIZADO YTD" : "REALIZADO MÊS";
-            document.getElementById('label-m').innerText = term + (isC ? " 2026" : " MÊS");
-            document.getElementById('th-m-lob').innerText = term;
-            document.getElementById('th-m-gst').innerText = term;
-
-            const bL = budgetLOB[v] || budgetLOB["JAN"];
-            const bG = budgetGST[v] || budgetGST["JAN"];
-            
-            let currentTotalR = 0;
-            let currentTotalM = 0;
-
-            const processRows = (data, isGestor) => {
-                const realMap = isGestor ? realizadoGST_JAN : realizadoLOB_JAN;
-                const blacklist = ["FELIPE PELLEGRINI", "FILIPE COELHO", "AFFILIATE"];
-
-                let rows = Object.keys(data)
-                    .filter(k => !isGestor || !blacklist.includes(k)) // Filtra os gestores indesejados
-                    .map(k => {
-                        let m = data[k];
-                        let r = hasRealData ? (realMap[k] || 0) : 0;
-                        return { key: k, real: r, meta: m };
-                    });
-
-                if(isGestor) {
-                    rows.sort((a, b) => hasRealData ? (b.real - a.real) : (b.meta - a.meta));
-                }
-
-                let html = "";
-                rows.forEach(row => {
-                    let vr = row.real - row.meta;
-                    let vp = row.meta > 0 ? (row.real/row.meta - 1) * 100 : 0;
-                    if(!isGestor) { currentTotalR += row.real; currentTotalM += row.meta; }
-                    html += `<tr>
-                        <td class="col-nome">${row.key}</td>
-                        <td>${fmt(row.real)}</td>
-                        <td>${fmt(row.meta)}</td>
-                        <td class="${vr<0?'neg':'pos'}">${vr >= 0 ? '+' : ''}${fmt(vr)}</td>
-                        <td class="${vp<0?'neg':'pos'}">${vp >= 0 ? '+' : ''}${Math.round(vp)}%</td>
-                    </tr>`;
-                });
-                return html;
-            };
-
-            document.getElementById('body-lob').innerHTML = processRows(bL, false);
-            document.getElementById('body-gst').innerHTML = processRows(bG, true);
-
-            const varR = currentTotalR - currentTotalM;
-            const varP = currentTotalM > 0 ? (currentTotalR/currentTotalM - 1) * 100 : 0;
-
-            document.getElementById('foot-lob').innerHTML = `<tr><td class="col-nome text-white">TOTAL GERAL BGS</td><td>${fmt(currentTotalR)}</td><td>${fmt(currentTotalM)}</td><td class="${varR<0?'text-red-400':'text-emerald-400'}">${varR >= 0 ? '+' : ''}${fmt(varR)}</td><td class="${varP<0?'text-red-400':'text-emerald-400'}">${varP >= 0 ? '+' : ''}${Math.round(varP)}%</td></tr>`;
-
-            document.getElementById('val-r').innerText = "R$ " + fmt(currentTotalR);
-            document.getElementById('val-m').innerText = "R$ " + fmt(currentTotalM);
-            document.getElementById('val-vr').innerText = (varR >= 0 ? "+R$ " : "R$ ") + fmt(varR);
-            document.getElementById('val-vr').className = "kpi-value " + (varR < 0 ? "neg" : "pos");
-            document.getElementById('val-vp').innerText = (varP >= 0 ? "+" : "") + Math.round(varP) + "%";
-            document.getElementById('val-vp').className = "kpi-value " + (varP < 0 ? "neg" : "pos");
-
-            const realJanTotal = 31297537;
-            const percAnual = (realJanTotal / metaAnualTotal) * 100;
-            document.getElementById('prog-p').innerText = percAnual.toFixed(1) + "%";
-            document.getElementById('prog-b').style.width = percAnual + "%";
+        function togglePDD() {
+            const vReceita = document.getElementById('view-receita');
+            const vPDD = document.getElementById('view-pdd');
+            const btnPDD = document.getElementById('btn-pdd-toggle');
+            if (vPDD.classList.contains('hidden')) {
+                vReceita.classList.add('hidden');
+                vPDD.classList.remove('hidden');
+                btnPDD.innerText = "Ver Dashboard";
+                renderPDD();
+            } else {
+                vPDD.classList.add('hidden');
+                vReceita.classList.remove('hidden');
+                btnPDD.innerText = "Painel PDD";
+            }
         }
 
-        const nav = document.getElementById('nav-meses');
-        ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"].forEach(m => {
-            let btn = document.createElement('button');
-            btn.id = "btn-" + m; btn.className = "nav-btn"; btn.innerText = m;
-            btn.onclick = () => changeView(m); nav.appendChild(btn);
-        });
+        function renderPDD() {
+            let html = "", tj = 0, tf = 0;
+            pddData.forEach(d => {
+                tj += d.j; tf += d.f; let tot = d.j + d.f;
+                html += `<tr><td class="col-nome">${d.g} <span class="bg-blue-100 px-1 rounded text-[6px]">${d.o}</span><br><span class="text-slate-400 font-medium text-[6px]">${d.r}</span></td><td class="text-center"><span class="status-badge ${d.s==='ENTRADA'?'status-entrada':'status-reversao'}">${d.s}</span></td><td class="${d.j>0?'neg':'pos'}">${fmt(d.j)}</td><td class="${d.f>0?'neg':'pos'}">${fmt(d.f)}</td><td class="pr-4 font-black ${tot>0?'neg':'pos'}">${fmt(tot)}</td></tr>`;
+            });
+            document.getElementById('b-pdd').innerHTML = html;
+            document.getElementById('f-pdd').innerHTML = `<tr><td class="text-left pl-4">TOTAL GERAL PDD</td><td></td><td>${fmt(tj)}</td><td>${fmt(tf)}</td><td class="pr-4">${fmt(tj+tf)}</td></tr>`;
+        }
 
-        changeView('JAN');
+        function switchMes(mes, btn) {
+            // Se clicar em um mês estando no PDD, volta para tela de Receita
+            if (!document.getElementById('view-pdd').classList.contains('hidden')) {
+                togglePDD();
+            }
+
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (!db[mes]) {
+                const empty = `
+                    <div class="flex flex-col items-center justify-center h-full w-full py-16 opacity-40">
+                        <div class="text-[24px] mb-2">⏳</div>
+                        <div class="text-[9px] font-black uppercase text-slate-500 tracking-widest text-center">Aguardando Fechamento</div>
+                    </div>`;
+
+                document.getElementById('b-lob').innerHTML = `<tr><td colspan="5">${empty}</td></tr>`;
+                document.getElementById('f-lob').innerHTML = "";
+                document.getElementById('b-gst').innerHTML = `<tr><td colspan="5">${empty}</td></tr>`;
+                document.getElementById('f-gst').innerHTML = "";
+                document.getElementById('b-share').innerHTML = empty;
+
+                ['k-real','k-fcst','k-var-rs','k-var-p'].forEach(id => document.getElementById(id).innerText = "-");
+                document.getElementById('ytd-perc').innerText = "-";
+                document.getElementById('ytd-bar').style.width = "0%";
+                document.getElementById('ytd-gap').innerText = "GAP: R$ -";
+                return;
+            }
+
+            const d = db[mes];
+            let hL = "", hG = "", hS = "";
+            
+            Object.entries(d.lobs).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n, [r, f]]) => {
+                let v = r-f, p = f>0 ? Math.round((r/f-1)*100) : 0;
+                hL += `<tr><td class="col-nome">${n}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
+                hS += `<div class="bg-white border-l-4 border-slate-800 share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${n.split(' - ')[1] || n}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="share-text-sub text-slate-400 italic">R$ ${fmt(r)}</span></div></div>`;
+            });
+            
+            Object.entries(d.gestores).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n, [r, f]]) => {
+                let v = r-f, p = f>0 ? Math.round((r/f-1)*100) : 0;
+                hG += `<tr><td class="col-nome">${n}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
+            });
+
+            document.getElementById('b-lob').innerHTML = hL;
+            document.getElementById('b-gst').innerHTML = hG;
+            document.getElementById('b-share').innerHTML = hS;
+            
+            let vT = d.real-d.fcst;
+            document.getElementById('f-lob').innerHTML = `<tr><td class="text-left pl-4">TOTAL</td><td>${fmt(d.real)}</td><td>${fmt(d.fcst)}</td><td class="${vT<0?'text-red-400':'text-emerald-400'}">${fmt(vT)}</td><td class="pr-2">${Math.round((d.real/d.fcst-1)*100)}%</td></tr>`;
+            document.getElementById('f-gst').innerHTML = ""; // Faixa removida conforme solicitado
+            
+            document.getElementById('k-real').innerText = "R$ " + fmt(d.real);
+            document.getElementById('k-fcst').innerText = "R$ " + fmt(d.fcst);
+            document.getElementById('k-var-rs').innerText = (vT>=0?"+":"") + fmt(vT);
+            document.getElementById('k-var-p').innerText = (vT>=0?"+":"") + (d.real/d.fcst*100-100).toFixed(1) + "%";
+            
+            let yPerc = (d.ytd / META_ANUAL * 100).toFixed(1);
+            document.getElementById('ytd-perc').innerText = yPerc + "%";
+            document.getElementById('ytd-bar').style.width = yPerc + "%";
+            document.getElementById('ytd-gap').innerText = "GAP: R$ " + fmt(META_ANUAL - d.ytd);
+        }
+
+        // INIT NAV
+        const nav = document.getElementById('nav-meses');
+        const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ", "CONSOLIDADO"];
+        meses.forEach(m => {
+            const b = document.createElement('button'); b.className = "nav-btn"; b.innerText = m;
+            if(m === "CONSOLIDADO") b.classList.add('bg-slate-300', 'border-slate-400');
+            b.onclick = () => switchMes(m, b);
+            nav.appendChild(b);
+            if(m === "FEV") { b.classList.add('active'); switchMes("FEV", b); }
+        });
     </script>
 </body>
 </html>
