@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -40,19 +41,19 @@
         <div id="view-receita" class="flex flex-col gap-2 flex-1 min-h-0">
             <div class="grid grid-cols-5 gap-2 h-16 shrink-0">
                 <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-slate-800 shadow-sm flex flex-col justify-center">
-                    <p class="text-[7px] font-900 text-slate-500 uppercase">Realizado Mês</p>
+                    <p class="text-[7px] font-900 text-slate-500 uppercase kpi-label-real">Realizado Mês</p>
                     <p id="k-real" class="text-lg font-900">R$ -</p>
                 </div>
                 <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm flex flex-col justify-center">
-                    <p class="text-[7px] font-900 text-emerald-600 uppercase">FCST Mês</p>
+                    <p class="text-[7px] font-900 text-emerald-600 uppercase kpi-label-fcst">FCST Mês</p>
                     <p id="k-fcst" class="text-lg font-900 text-emerald-700">R$ -</p>
                 </div>
                 <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm flex flex-col justify-center">
-                    <p class="text-[7px] font-900 text-emerald-600 uppercase">Var R$ (Mês)</p>
+                    <p class="text-[7px] font-900 text-emerald-600 uppercase kpi-label-var-rs">Var R$ (Mês)</p>
                     <p id="k-var-rs" class="text-lg font-900 text-emerald-700">-</p>
                 </div>
                 <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm flex flex-col justify-center">
-                    <p class="text-[7px] font-900 text-emerald-600 uppercase">Var % (Mês)</p>
+                    <p class="text-[7px] font-900 text-emerald-600 uppercase kpi-label-var-p">Var % (Mês)</p>
                     <p id="k-var-p" class="text-lg font-900 text-emerald-700">-</p>
                 </div>
                 <div class="bg-blue-50 rounded-xl p-2 border border-blue-200 border-t-4 border-t-blue-500 shadow-sm flex flex-col justify-center">
@@ -70,26 +71,42 @@
 
             <div class="grid grid-cols-12 gap-2 flex-1 min-h-0">
                 <div class="col-span-5 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
-                    <div class="section-header">Performance por LOB</div>
+                    <div class="section-header" id="sec-lob">Performance por LOB</div>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th class="text-left pl-4">LOB</th><th>Real</th><th>FCST</th><th>Var R$</th><th class="pr-2">Var %</th></tr></thead>
+                            <thead id="thead-lob">
+                                <tr>
+                                    <th class="text-left pl-4">LOB</th>
+                                    <th>Real</th>
+                                    <th>FCST</th>
+                                    <th>Var R$</th>
+                                    <th class="pr-2">Var %</th>
+                                </tr>
+                            </thead>
                             <tbody id="b-lob"></tbody>
                             <tfoot id="f-lob"></tfoot>
                         </table>
                     </div>
                 </div>
                 <div class="col-span-4 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
-                    <div class="section-header">Top 10 Clientes (Realizado)</div>
+                    <div class="section-header" id="sec-top">Top 10 Clientes (Realizado)</div>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th class="text-left pl-4">Cliente</th><th>Real</th><th>FCST</th><th>Var R$</th><th class="pr-2">Var %</th></tr></thead>
+                            <thead id="thead-cli">
+                                <tr>
+                                    <th class="text-left pl-4">Cliente</th>
+                                    <th>Real</th>
+                                    <th>FCST</th>
+                                    <th>Var R$</th>
+                                    <th class="pr-2">Var %</th>
+                                </tr>
+                            </thead>
                             <tbody id="b-cli"></tbody>
                         </table>
                     </div>
                 </div>
                 <div class="col-span-3 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden shadow-sm">
-                    <div class="section-header italic">Share por LOB (Realizado)</div>
+                    <div class="section-header italic" id="sec-share">Share por LOB (Realizado)</div>
                     <div id="b-share" class="p-1.5 overflow-y-auto h-full"></div>
                 </div>
             </div>
@@ -166,12 +183,62 @@
             document.getElementById('f-pdd').innerHTML = `<tr><td class="text-left pl-4">TOTAL GERAL PDD</td><td></td><td>${fmt(tj)}</td><td>${fmt(tf)}</td><td class="pr-4">${fmt(tj+tf)}</td></tr>`;
         }
 
+        // ---------- NOVO: Helper para alternar a sinalização YTD ----------
+        function setYTDLabels(isYTD) {
+            // Cards superiores
+            document.querySelectorAll('.kpi-label-real').forEach(el => el.textContent = isYTD ? 'Realizado YTD' : 'Realizado Mês');
+            document.querySelectorAll('.kpi-label-fcst').forEach(el => el.textContent = isYTD ? 'FCST YTD' : 'FCST Mês');
+            document.querySelectorAll('.kpi-label-var-rs').forEach(el => el.textContent = isYTD ? 'Var R$ (YTD)' : 'Var R$ (Mês)');
+            document.querySelectorAll('.kpi-label-var-p').forEach(el => el.textContent = isYTD ? 'Var % (YTD)' : 'Var % (Mês)');
+
+            // Cabeçalhos de seção
+            const secLOB = document.querySelector('#sec-lob');
+            const secTop = document.querySelector('#sec-top');
+            const secShare = document.querySelector('#sec-share');
+            if (secLOB)  secLOB.textContent  = isYTD ? 'Performance por LOB (YTD)' : 'Performance por LOB';
+            if (secTop)  secTop.textContent  = isYTD ? 'Top 10 Clientes (Realizado YTD)' : 'Top 10 Clientes (Realizado)';
+            if (secShare) secShare.textContent = isYTD ? 'Share por LOB (Realizado YTD)' : 'Share por LOB (Realizado)';
+
+            // Títulos de colunas nas tabelas
+            const thsLOB = document.querySelectorAll('#thead-lob th');
+            if (thsLOB.length >= 5) {
+                thsLOB[1].textContent = isYTD ? 'Real (YTD)' : 'Real';
+                thsLOB[2].textContent = isYTD ? 'FCST (YTD)' : 'FCST';
+                thsLOB[3].textContent = 'Var R$';
+                thsLOB[4].textContent = 'Var %';
+            }
+
+            const thsCLI = document.querySelectorAll('#thead-cli th');
+            if (thsCLI.length >= 5) {
+                thsCLI[1].textContent = isYTD ? 'Real (YTD)' : 'Real';
+                thsCLI[2].textContent = isYTD ? 'FCST (YTD)' : 'FCST';
+                thsCLI[3].textContent = 'Var R$';
+                thsCLI[4].textContent = 'Var %';
+            }
+
+            // Rodapé LOB
+            const fLobTitle = document.querySelector('#f-lob-title');
+            if (fLobTitle) fLobTitle.textContent = isYTD ? 'TOTAL (YTD)' : 'TOTAL';
+
+            // Botão CONSOLIDADO com sufixo (opcional, visual)
+            document.querySelectorAll('#nav-meses .nav-btn').forEach(b => {
+                if (b.innerText.replace(' (YTD)','') === 'CONSOLIDADO') {
+                    b.innerText = isYTD ? 'CONSOLIDADO (YTD)' : 'CONSOLIDADO';
+                }
+            });
+        }
+        // ------------------------------------------------------------------
+
         function switchMes(mes, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('view-receita').classList.remove('hidden');
             document.getElementById('view-pdd').classList.add('hidden');
             document.getElementById('btn-pdd-toggle').innerText = "Painel PDD";
+
+            // Alternar rótulos YTD quando CONSOLIDADO
+            const isYTD = (mes === 'CONSOLIDADO');
+            setYTDLabels(isYTD);
 
             if (!db[mes]) {
                 const empty = `<div class="flex flex-col items-center justify-center h-full w-full py-16 opacity-40"><div class="text-[24px] mb-2">⏳</div><div class="text-[9px] font-black uppercase text-slate-500 tracking-widest text-center">Dados serão divulgados<br>após fechamento do período</div></div>`;
@@ -216,13 +283,22 @@
             document.getElementById('b-share').innerHTML = hS;
             
             let vT = d.real - d.fcst;
-            document.getElementById('f-lob').innerHTML = `<tr><td class="text-left pl-4">TOTAL</td><td>${fmt(d.real)}</td><td>${fmt(d.fcst)}</td><td class="${vT<0?'text-red-400':'text-emerald-400'}">${fmt(vT)}</td><td class="pr-2">${Math.round((d.real/d.fcst-1)*100)}%</td></tr>`;
-            
+            document.getElementById('f-lob').innerHTML = `
+                <tr>
+                    <td class="text-left pl-4"><span id="f-lob-title">${isYTD ? 'TOTAL (YTD)' : 'TOTAL'}</span></td>
+                    <td>${fmt(d.real)}</td>
+                    <td>${fmt(d.fcst)}</td>
+                    <td class="${vT<0?'text-red-400':'text-emerald-400'}">${fmt(vT)}</td>
+                    <td class="pr-2">${Math.round((d.real/d.fcst-1)*100)}%</td>
+                </tr>`;
+
+            // KPIs topo
             document.getElementById('k-real').innerText = "R$ " + fmt(d.real);
             document.getElementById('k-fcst').innerText = "R$ " + fmt(d.fcst);
             document.getElementById('k-var-rs').innerText = (vT>=0?"+":"") + fmt(vT);
             document.getElementById('k-var-p').innerText = (vT>=0?"+":"") + (d.real/d.fcst*100-100).toFixed(1) + "%";
             
+            // YTD meta
             let yPerc = (d.ytd / META_ANUAL * 100).toFixed(1);
             document.getElementById('ytd-perc').innerText = yPerc + "%";
             document.getElementById('ytd-bar').style.width = yPerc + "%";
@@ -241,5 +317,7 @@
     </script>
 </body>
 </html>
+
+
 
 
