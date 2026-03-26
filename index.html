@@ -120,17 +120,20 @@
       </div>
     </div>
 
-    <div id="view-previa" class="hidden flex flex-col gap-2 flex-1 min-h-0">
-      <div class="grid grid-cols-4 gap-2 h-24 shrink-0">
-        <div class="bg-white rounded-xl p-3 border border-slate-100 shadow-sm flex flex-col justify-center">
+    <div id="view-previa" class="hidden flex flex-col gap-3 flex-1 min-h-0">
+      <div class="grid grid-cols-4 gap-2 min-h-[105px] shrink-0">
+        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
           <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Prévia Realizado</p>
-          <p id="k-previa-real" class="text-2xl font-black text-slate-900">R$ -</p>
+          <p id="k-previa-real" class="text-xl font-black text-slate-900 leading-none">R$ -</p>
         </div>
-        <div class="bg-white rounded-xl p-3 border border-red-100 shadow-sm flex flex-col justify-center relative">
-          <p class="text-[8px] font-black uppercase text-slate-500">Real vs Budget</p>
-          <p id="k-previa-rvb-rs" class="text-2xl font-black text-red-600">R$ -</p>
-          <p id="perc-previa-rvb-p" class="text-[10px] font-black text-red-600 mt-[-4px]">-</p>
-          <div class="w-full h-1.5 bg-red-100 rounded-full mt-2 overflow-hidden">
+
+        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-red-500">
+          <div class="flex justify-between items-start">
+            <p class="text-[8px] font-black uppercase text-slate-500">Real vs Budget</p>
+            <p id="perc-previa-rvb-p" class="text-[10px] font-black text-red-600 leading-none">-</p>
+          </div>
+          <p id="k-previa-rvb-rs" class="text-xl font-black text-red-600 my-1 leading-none">R$ -</p>
+          <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
             <div id="bar-previa-budget" class="bg-red-600 h-full" style="width:0%"></div>
           </div>
           <div class="flex justify-between mt-1">
@@ -138,11 +141,14 @@
             <p id="perc-previa-budget" class="text-[7px] font-black text-red-600 uppercase italic">Ating.: -</p>
           </div>
         </div>
-        <div class="bg-white rounded-xl p-3 border border-red-100 shadow-sm flex flex-col justify-center relative">
-          <p class="text-[8px] font-black uppercase text-slate-500">Real vs Forecast</p>
-          <p id="k-previa-rvf-rs" class="text-2xl font-black text-red-600">R$ -</p>
-          <p id="perc-previa-rvf-p" class="text-[10px] font-black text-red-600 mt-[-4px]">-</p>
-          <div class="w-full h-1.5 bg-red-100 rounded-full mt-2 overflow-hidden">
+
+        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-red-500">
+          <div class="flex justify-between items-start">
+            <p class="text-[8px] font-black uppercase text-slate-500">Real vs Forecast</p>
+            <p id="perc-previa-rvf-p" class="text-[10px] font-black text-red-600 leading-none">-</p>
+          </div>
+          <p id="k-previa-rvf-rs" class="text-xl font-black text-red-600 my-1 leading-none">R$ -</p>
+          <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
             <div id="bar-previa-forecast" class="bg-red-600 h-full" style="width:0%"></div>
           </div>
           <div class="flex justify-between mt-1">
@@ -150,10 +156,11 @@
             <p id="perc-previa-forecast" class="text-[7px] font-black text-red-600 uppercase italic">Ating.: -</p>
           </div>
         </div>
-        <div class="bg-white rounded-xl p-3 border border-slate-100 shadow-sm flex flex-col justify-center">
+
+        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
           <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Mês Ativo</p>
-          <p id="previa-mes" class="text-2xl font-black text-slate-900">MAR</p>
-          <p id="previa-data" class="text-[10px] font-bold text-slate-400">-</p>
+          <p id="previa-mes" class="text-xl font-black text-slate-900 leading-none">MAR</p>
+          <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">26/03/2026</p>
         </div>
       </div>
 
@@ -319,7 +326,6 @@
       let hT = "", hS = "";
       let totBg = 0, totFc = 0, totPr = 0;
 
-      // Ordenação numérica para a tabela: 5020, 5021, 5022...
       const lobsOrdenadosTabela = Object.entries(previaData.lobs).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
 
       lobsOrdenadosTabela.forEach(([code, [bg, fc, pr]]) => {
@@ -339,7 +345,6 @@
         </tr>`;
       });
 
-      // Ordenação por valor de Receita Prévia (do mais expressivo para o menos expressivo) para o Share
       const lobsOrdenadosShare = Object.entries(previaData.lobs).sort((a, b) => b[1][2] - a[1][2]);
 
       lobsOrdenadosShare.forEach(([code, [bg, fc, pr]]) => {
@@ -354,7 +359,6 @@
       document.getElementById('b-previa-lob').innerHTML = hT;
       document.getElementById('b-share-previa').innerHTML = hS;
 
-      // Linha de Totais da Prévia
       let vTB = totPr - totBg, pTB = Math.round((totPr/totBg-1)*100);
       let vTF = totPr - totFc, pTF = Math.round((totPr/totFc-1)*100);
 
@@ -381,5 +385,4 @@
   </script>
 </body>
 </html>
-
 
