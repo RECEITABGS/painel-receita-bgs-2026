@@ -160,7 +160,7 @@
         <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
           <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Mês Ativo</p>
           <p id="previa-mes" class="text-xl font-black text-slate-900 leading-none">MAR</p>
-          <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">26/03/2026</p>
+          <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">27/03/2026</p>
         </div>
       </div>
 
@@ -207,22 +207,22 @@
       "CONSOLIDADO": { ytd: 59781711, real: 59781711, fcst: 56617964, lobs: { "5020": [7274181, 8520585], "5021": [5370546, 4392765], "5022": [30628418, 26765936], "5023": [6343455, 5132169], "5024": [700780, 687090], "5025": [4024247, 4216789], "5029": [43583, 77782], "5200": [255713, 174997], "6000": [2546807, 3567805], "6220": [2593980, 3082046] }, clientes: { "KINROSS": [7985220, 6150000], "COIMPA": [5910688, 4835309], "BRAZAURO": [3452756, 1800000], "ONCO PROD": [2687386, 1763567], "SANTA LUZ": [2487194, 1600000], "KUEHNENAGEL": [2398234, 500000], "CASCAR": [2251091, 600000], "135 - BRINKS": [2132417, 2418243], "ASAHI": [1988901, 1550000], "MOTOROLA": [1435874, 839032] } }
     };
 
-    // DADOS ATUALIZADOS CONFORME PRINT DA PLANILHA
+    // DADOS ATUALIZADOS CONFORME PRINT DA PLANILHA (27/03/2026)
     const previaData = {
-      total: 22589058, // Total Geral da Prévia
+      total: 23098718, // Total Geral Prévia Realizado do Print
       budgetTotal: 31583357, 
       forecastTotal: 33000000,
       lobs: { 
-        "5020": [3991180, 3991180, 2039630], // Budget, Forecast, Prévia
-        "5021": [2473205, 2700000, 2173587], 
-        "5022": [14304163, 14826119, 11171418], 
-        "5023": [4332109, 5000000, 3475457], 
+        "5020": [3991180, 3991180, 2165338], // Budget, Forecast, Prévia
+        "5021": [2473205, 2700000, 2229838], 
+        "5022": [14304163, 14826119, 11080829], 
+        "5023": [4332109, 5000000, 3662211], 
         "5024": [344919, 344919, 416668], 
-        "5025": [2554802, 2554802, 1632231], 
+        "5025": [2554802, 2554802, 1848884], 
         "5029": [27674, 27674, 17875], 
         "5200": [64358, 64358, 0], 
         "6000": [1748750, 1748750, 766284], 
-        "6220": [1742198, 1742198, 895907] 
+        "6220": [1742198, 1742198, 910791] 
       }
     };
 
@@ -322,14 +322,14 @@
       document.getElementById('k-previa-real').innerText = "R$ " + fmt(real);
       
       let varB = real - b;
-      document.getElementById('k-previa-rvb-rs').innerText = "R$ " + fmt(varB);
+      document.getElementById('k-previa-rvb-rs').innerText = (varB>=0?"+":"") + "R$ " + fmt(varB);
       document.getElementById('perc-previa-rvb-p').innerText = Math.round((real/b-1)*100) + "%";
       document.getElementById('bar-previa-budget').style.width = Math.min((real/b*100),100) + "%";
       document.getElementById('label-previa-budget').innerText = "BUDGET: R$ " + fmt(b);
       document.getElementById('perc-previa-budget').innerText = "Ating.: " + (real/b*100).toFixed(1) + "%";
       
       let varF = real - f;
-      document.getElementById('k-previa-rvf-rs').innerText = "R$ " + fmt(varF);
+      document.getElementById('k-previa-rvf-rs').innerText = (varF>=0?"+":"") + "R$ " + fmt(varF);
       document.getElementById('perc-previa-rvf-p').innerText = Math.round((real/f-1)*100) + "%";
       document.getElementById('bar-previa-forecast').style.width = Math.min((real/f*100),100) + "%";
       document.getElementById('label-previa-forecast').innerText = "FORECAST: R$ " + fmt(f);
@@ -394,9 +394,9 @@
       b.className = "nav-btn"; b.innerText = m;
       b.onclick = () => switchMes(m, b);
       nav.appendChild(b);
+      // Inicia em FEV ou você pode mudar para MAR se já tiver os dados fechados
       if (m === "FEV") { b.classList.add('active'); switchMes("FEV", b); }
     });
   </script>
 </body>
 </html>
-
