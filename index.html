@@ -107,11 +107,12 @@
         <table>
           <thead>
             <tr>
-              <th class="text-left pl-4" style="width: 45%">Gestor / ORG / Razão Social</th>
+              <th class="text-left pl-4" style="width: 40%">Gestor / ORG / Razão Social</th>
               <th class="text-center" style="width: 10%">Situação</th>
-              <th style="width: 15%">Jan/26</th>
-              <th style="width: 15%">Fev/26</th>
-              <th class="pr-4" style="width: 15%">Total Geral</th>
+              <th style="width: 12%">Jan/26</th>
+              <th style="width: 12%">Fev/26</th>
+              <th style="width: 12%">Mar/26</th>
+              <th class="pr-4" style="width: 14%">Total Geral</th>
             </tr>
           </thead>
           <tbody id="b-pdd"></tbody>
@@ -122,46 +123,39 @@
 
     <div id="view-previa" class="hidden flex flex-col gap-3 flex-1 min-h-0">
       <div class="grid grid-cols-4 gap-2 min-h-[105px] shrink-0">
-        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
-          <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Prévia Realizado</p>
-          <p id="k-previa-real" class="text-xl font-black text-slate-900 leading-none">R$ -</p>
-        </div>
-
-        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-red-500">
-          <div class="flex justify-between items-start">
-            <p class="text-[8px] font-black uppercase text-slate-500">Real vs Budget</p>
-            <p id="perc-previa-rvb-p" class="text-[10px] font-black text-red-600 leading-none">-</p>
+          <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
+            <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Prévia Realizado</p>
+            <p id="k-previa-real" class="text-xl font-black text-slate-900 leading-none">R$ -</p>
           </div>
-          <p id="k-previa-rvb-rs" class="text-xl font-black text-red-600 my-1 leading-none">R$ -</p>
-          <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
-            <div id="bar-previa-budget" class="bg-red-600 h-full" style="width:0%"></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-red-500">
+             <div class="flex justify-between items-start">
+               <p class="text-[8px] font-black uppercase text-slate-500">Real vs Budget</p>
+               <p id="perc-previa-rvb-p" class="text-[10px] font-black text-red-600 leading-none">-</p>
+             </div>
+             <p id="k-previa-rvb-rs" class="text-xl font-black text-red-600 my-1 leading-none">R$ -</p>
+             <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden"><div id="bar-previa-budget" class="bg-red-600 h-full" style="width:0%"></div></div>
+             <div class="flex justify-between mt-1">
+               <p id="label-previa-budget" class="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">BUDGET: R$ -</p>
+               <p id="perc-previa-budget" class="text-[7px] font-black text-red-600 uppercase italic">Ating.: -</p>
+             </div>
           </div>
-          <div class="flex justify-between mt-1">
-            <p id="label-previa-budget" class="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">BUDGET: R$ -</p>
-            <p id="perc-previa-budget" class="text-[7px] font-black text-red-600 uppercase italic">Ating.: -</p>
+          <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-red-500">
+             <div class="flex justify-between items-start">
+               <p class="text-[8px] font-black uppercase text-slate-500">Real vs Forecast</p>
+               <p id="perc-previa-rvf-p" class="text-[10px] font-black text-red-600 leading-none">-</p>
+             </div>
+             <p id="k-previa-rvf-rs" class="text-xl font-black text-red-600 my-1 leading-none">R$ -</p>
+             <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden"><div id="bar-previa-forecast" class="bg-red-600 h-full" style="width:0%"></div></div>
+             <div class="flex justify-between mt-1">
+               <p id="label-previa-forecast" class="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">FORECAST: R$ -</p>
+               <p id="perc-previa-forecast" class="text-[7px] font-black text-red-600 uppercase italic">Ating.: -</p>
+             </div>
           </div>
-        </div>
-
-        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-red-500">
-          <div class="flex justify-between items-start">
-            <p class="text-[8px] font-black uppercase text-slate-500">Real vs Forecast</p>
-            <p id="perc-previa-rvf-p" class="text-[10px] font-black text-red-600 leading-none">-</p>
+          <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
+            <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Mês Ativo</p>
+            <p id="previa-mes" class="text-xl font-black text-slate-900 leading-none">MAR</p>
+            <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">01/04/2026</p>
           </div>
-          <p id="k-previa-rvf-rs" class="text-xl font-black text-red-600 my-1 leading-none">R$ -</p>
-          <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
-            <div id="bar-previa-forecast" class="bg-red-600 h-full" style="width:0%"></div>
-          </div>
-          <div class="flex justify-between mt-1">
-            <p id="label-previa-forecast" class="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">FORECAST: R$ -</p>
-            <p id="perc-previa-forecast" class="text-[7px] font-black text-red-600 uppercase italic">Ating.: -</p>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
-          <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Mês Ativo</p>
-          <p id="previa-mes" class="text-xl font-black text-slate-900 leading-none">MAR</p>
-          <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">27/03/2026</p>
-        </div>
       </div>
 
       <div class="grid grid-cols-12 gap-2 flex-1 min-h-0">
@@ -171,14 +165,7 @@
             <table>
               <thead>
                 <tr>
-                  <th class="text-left pl-4">LOB</th>
-                  <th>Budget</th>
-                  <th>Forecast</th>
-                  <th>Prévia</th>
-                  <th>Var Bud (R$)</th>
-                  <th>Var Bud (%)</th>
-                  <th>Var Fcst (R$)</th>
-                  <th class="pr-2">Var Fcst (%)</th>
+                  <th class="text-left pl-4">LOB</th><th>Budget</th><th>Forecast</th><th>Prévia</th><th>Var Bud (R$)</th><th>Var Bud (%)</th><th>Var Fcst (R$)</th><th class="pr-2">Var Fcst (%)</th>
                 </tr>
               </thead>
               <tbody id="b-previa-lob"></tbody>
@@ -203,55 +190,49 @@
 
     const db = {
       "JAN": { ytd: 31297538, real: 31297538, fcst: 29256093, lobs: { "5020": [3779396, 4688774], "5021": [2617256, 2181798], "5022": [17020522, 14353762], "5023": [2809100, 2352613], "5024": [329344, 405122], "5025": [1857479, 2041786], "5029": [34775, 37191], "5200": [122918, 129902], "6000": [1277913, 1508320], "6220": [1448834, 1556826] }, clientes: { "KINROSS": [4377998, 3850000], "COIMPA": [3029497, 2442814], "BRAZAURO": [2307783, 1000000], "OURIBANK": [1375712, 721677], "ONCO PROD": [1201652, 668936], "KUEHNENAGEL": [1137897, 300000], "CASCAR": [1128133, 300000], "ASAHI": [1095264, 850000], "SANTA LUZ": [1037650, 800000], "135 - BRINKS": [1010913, 1511937] } },
-      "FEV": { ytd: 59781711, real: 28484173, fcst: 27361871, lobs: { "5020": [3494785, 3831811], "5021": [2753290, 2210967], "5022": [13607896, 12412174], "5023": [3534355, 2779556], "5024": [371436, 281968], "5025": [2166768, 2175003], "5029": [8808, 40591], "5200": [132795, 45095], "6000": [1268894, 2059485], "6220": [1145146, 1525220] }, clientes: { "KINROSS": [3607222, 2300000], "COIMPA": [2881191, 2392495], "ONCO PROD": [1485734, 1094631], "SANTA LUZ": [1449544, 800000], "KUEHNENAGEL": [1260337, 200000], "BRAZAURO": [1144973, 800000], "CASCAR": [1122957, 300000], "135 - BRINKS": [1121504, 906306], "MOTOROLA": [1003952, 839032], "ASAHI": [893637, 700000] } },
-      "CONSOLIDADO": { ytd: 59781711, real: 59781711, fcst: 56617964, lobs: { "5020": [7274181, 8520585], "5021": [5370546, 4392765], "5022": [30628418, 26765936], "5023": [6343455, 5132169], "5024": [700780, 687090], "5025": [4024247, 4216789], "5029": [43583, 77782], "5200": [255713, 174997], "6000": [2546807, 3567805], "6220": [2593980, 3082046] }, clientes: { "KINROSS": [7985220, 6150000], "COIMPA": [5910688, 4835309], "BRAZAURO": [3452756, 1800000], "ONCO PROD": [2687386, 1763567], "SANTA LUZ": [2487194, 1600000], "KUEHNENAGEL": [2398234, 500000], "CASCAR": [2251091, 600000], "135 - BRINKS": [2132417, 2418243], "ASAHI": [1988901, 1550000], "MOTOROLA": [1435874, 839032] } }
+      "FEV": { ytd: 59781711, real: 28484173, fcst: 27361871, lobs: { "5020": [3494785, 3831811], "5021": [2753290, 2210967], "5022": [13607896, 12412174], "5023": [3534355, 2779556], "5024": [371436, 281968], "5025": [2166768, 2175003], "5029": [8808, 40591], "5200": [132795, 45095], "6000": [1268894, 2059485], "6220": [1145146, 1525220] }, clientes: { "KINROSS": [3607222, 2300000], "COIMPA": [2881191, 2392495], "ONCO PROD": [1485734, 1094631], "SANTA LUZ": [1449544, 800000], "KUEHNENAGEL": [1260337, 200000], "BRAZAURO": [1144973, 800000], "CASCAR": [1122957, 300000], "135 - BRINKS": [1121504, 906306], "MOTOROLA": [1003952, 839032], "ASAHI": [893637, 700000] } }
     };
 
-    // DADOS ATUALIZADOS CONFORME PRINT DA PLANILHA (27/03/2026)
     const previaData = {
-      total: 23098718, // Total Geral Prévia Realizado do Print
-      budgetTotal: 31583357, 
-      forecastTotal: 33000000,
-      lobs: { 
-        "5020": [3991180, 3991180, 2165338], // Budget, Forecast, Prévia
-        "5021": [2473205, 2700000, 2229838], 
-        "5022": [14304163, 14826119, 11080829], 
-        "5023": [4332109, 5000000, 3662211], 
-        "5024": [344919, 344919, 416668], 
-        "5025": [2554802, 2554802, 1848884], 
-        "5029": [27674, 27674, 17875], 
-        "5200": [64358, 64358, 0], 
-        "6000": [1748750, 1748750, 766284], 
-        "6220": [1742198, 1742198, 910791] 
-      }
+      total: 23098718, budgetTotal: 31583357, forecastTotal: 33000000,
+      lobs: { "5020": [3991180, 3991180, 2165338], "5021": [2473205, 2700000, 2229838], "5022": [14304163, 14826119, 11080829], "5023": [4332109, 5000000, 3662211], "5024": [344919, 344919, 416668], "5025": [2554802, 2554802, 1848884], "5029": [27674, 27674, 17875], "5200": [64358, 64358, 0], "6000": [1748750, 1748750, 766284], "6220": [1742198, 1742198, 910791] }
     };
 
+    // DADOS PDD ATUALIZADOS COM MARÇO
     const pddData = [
-      { g: "MARINA HOEPERS", o: "BRI", r: "TELLERINA COMERCIO DE PRESENTES SA", s: "ENTRADA", j: 0, f: 99224 },
-      { g: "MARINA HOEPERS", o: "BSL", r: "TELLERINA COMERCIO DE PRESENTES SA", s: "ENTRADA", j: 0, f: 6412 },
-      { g: "MARINA HOEPERS", o: "BSL", r: "CIDADE MARAVILHOSA INDÚSTRIA SA", s: "ENTRADA", j: 0, f: 272 },
-      { g: "JULIANA SANTOS", o: "BRI", r: "TELEFONICA BRASIL SA", s: "ENTRADA", j: 68148, f: 370178 },
-      { g: "JULIANA SANTOS", o: "BRI", r: "DHL GLOBAL FORWARDING BRAZIL LTDA", s: "REVERSÃO", j: -197, f: 0 }
+      { g: "MARINA HOEPERS", o: "BRI", r: "TELLERINA COMERCIO DE PRESENTES SA", s: "ENTRADA", j: 0, f: 99224, m: 219848 },
+      { g: "MARINA HOEPERS", o: "BSL", r: "TELLERINA COMERCIO DE PRESENTES SA", s: "ENTRADA", j: 0, f: 6412, m: 16283 },
+      { g: "MARINA HOEPERS", o: "BSL", r: "CIDADE MARAVILHOSA INDÚSTRIA SA", s: "ENTRADA", j: 0, f: 272, m: 0 },
+      { g: "JULIANA SANTOS", o: "BRI", r: "TELEFONICA BRASIL SA", s: "ENTRADA", j: 68148, f: 370178, m: 0 },
+      { g: "JULIANA SANTOS", o: "BRI", r: "TELEFONICA BRASIL SA", s: "REVERSÃO", j: 0, f: 0, m: -438325 },
+      { g: "JULIANA SANTOS", o: "BRI", r: "DHL GLOBAL FORWARDING BRAZIL LTDA", s: "REVERSÃO", j: -197, f: 0, m: 0 }
     ];
 
     function renderPDD() {
-      let html = "", tj = 0, tf = 0;
+      let html = "", tj = 0, tf = 0, tm = 0;
       pddData.forEach(d => {
-        tj += d.j; tf += d.f; let tot = d.j + d.f;
-        html += `<tr><td class="col-nome">${d.g} <span class="bg-blue-100 px-1 rounded text-[6px]">${d.o}</span><br><span class="text-slate-400 font-medium text-[6px]">${d.r}</span></td><td class="text-center"><span class="status-badge ${d.s==='ENTRADA'?'status-entrada':'status-reversao'}">${d.s}</span></td><td class="${d.j>0?'neg':'pos'}">${fmt(d.j)}</td><td class="${d.f>0?'neg':'pos'}">${fmt(d.f)}</td><td class="pr-4 font-black ${tot>0?'neg':'pos'}">${fmt(tot)}</td></tr>`;
+        tj += d.j; tf += d.f; tm += (d.m || 0); 
+        let tot = d.j + d.f + (d.m || 0);
+        
+        html += `<tr>
+          <td class="col-nome">${d.g} <span class="bg-blue-100 px-1 rounded text-[6px]">${d.o}</span><br><span class="text-slate-400 font-medium text-[6px]">${d.r}</span></td>
+          <td class="text-center"><span class="status-badge ${d.s==='ENTRADA'?'status-entrada':'status-reversao'}">${d.s}</span></td>
+          <td class="${d.j>0?'neg': d.j<0?'pos':''}">${fmt(d.j)}</td>
+          <td class="${d.f>0?'neg': d.f<0?'pos':''}">${fmt(d.f)}</td>
+          <td class="${d.m>0?'neg': d.m<0?'pos':''}">${fmt(d.m)}</td>
+          <td class="pr-4 font-black ${tot>0?'neg':'pos'}">${fmt(tot)}</td>
+        </tr>`;
       });
       document.getElementById('b-pdd').innerHTML = html;
-      document.getElementById('f-pdd').innerHTML = `<tr><td class="text-left pl-4">TOTAL GERAL PDD</td><td></td><td>${fmt(tj)}</td><td>${fmt(tf)}</td><td class="pr-4">${fmt(tj+tf)}</td></tr>`;
+      document.getElementById('f-pdd').innerHTML = `<tr><td class="text-left pl-4">TOTAL GERAL PDD</td><td></td><td>${fmt(tj)}</td><td>${fmt(tf)}</td><td>${fmt(tm)}</td><td class="pr-4">${fmt(tj+tf+tm)}</td></tr>`;
     }
 
     function switchMes(mes, btn) {
       document.querySelectorAll('#nav-meses .nav-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       showView('receita');
-      
       const isYTD = (mes === 'CONSOLIDADO');
       document.querySelectorAll('.kpi-label-real').forEach(el => el.textContent = isYTD ? 'Realizado YTD' : 'Realizado Mês');
-
       if (!db[mes]) {
         const empty = `<div class="flex flex-col items-center justify-center h-full w-full py-16 opacity-40"><div class="text-[24px] mb-2">⏳</div><div class="text-[9px] font-black uppercase text-slate-500 tracking-widest text-center">Dados serão divulgados<br>após fechamento do período</div></div>`;
         document.getElementById('b-lob').innerHTML = `<tr><td colspan="5">${empty}</td></tr>`;
@@ -263,34 +244,25 @@
         document.getElementById('ytd-gap').innerText = "GAP: R$ -";
         return;
       }
-
       const d = db[mes];
       let hL = "", hC = "", hS = "";
-
       Object.keys(d.lobs).sort().forEach(code => {
         const [r, f] = d.lobs[code];
         let v = r - f, p = f > 0 ? Math.round((r / f - 1) * 100) : 0;
         hL += `<tr><td class="col-nome">${code} - ${lobLabels[code]}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
       });
-
       Object.entries(d.lobs).sort((a,b)=>b[1][0]-a[1][0]).forEach(([code,[r]])=>{
-        if (r>0) {
-          hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code} - ${lobLabels[code]}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(r)}</span></div></div>`;
-        }
+        if (r>0) hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code} - ${lobLabels[code]}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(r)}</span></div></div>`;
       });
-
       Object.entries(d.clientes).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n,[r,f]])=>{
         let v=r-f, p=f>0 ? Math.round((r/f-1)*100) : 0;
         hC += `<tr><td class="col-nome">${n}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
       });
-
       document.getElementById('b-lob').innerHTML = hL;
       document.getElementById('b-cli').innerHTML = hC;
       document.getElementById('b-share').innerHTML = hS;
-
       let vT = d.real - d.fcst;
       document.getElementById('f-lob').innerHTML = `<tr><td class="text-left pl-4">${isYTD?'TOTAL (YTD)':'TOTAL'}</td><td>${fmt(d.real)}</td><td>${fmt(d.fcst)}</td><td class="${vT<0?'text-red-400':'text-emerald-400'}">${fmt(vT)}</td><td class="pr-2">${Math.round((d.real/d.fcst-1)*100)}%</td></tr>`;
-
       document.getElementById('k-real').innerText = "R$ " + fmt(d.real);
       document.getElementById('k-fcst').innerText = "R$ " + fmt(d.fcst);
       document.getElementById('k-var-rs').innerText = (vT>=0?"+":"") + fmt(vT);
@@ -318,16 +290,13 @@
       const d = new Date();
       document.getElementById('previa-data').innerText = String(d.getDate()).padStart(2,'0')+"/"+String(d.getMonth()+1).padStart(2,'0')+"/"+d.getFullYear();
       const real = previaData.total, b = previaData.budgetTotal, f = previaData.forecastTotal;
-      
       document.getElementById('k-previa-real').innerText = "R$ " + fmt(real);
-      
       let varB = real - b;
       document.getElementById('k-previa-rvb-rs').innerText = (varB>=0?"+":"") + "R$ " + fmt(varB);
       document.getElementById('perc-previa-rvb-p').innerText = Math.round((real/b-1)*100) + "%";
       document.getElementById('bar-previa-budget').style.width = Math.min((real/b*100),100) + "%";
       document.getElementById('label-previa-budget').innerText = "BUDGET: R$ " + fmt(b);
       document.getElementById('perc-previa-budget').innerText = "Ating.: " + (real/b*100).toFixed(1) + "%";
-      
       let varF = real - f;
       document.getElementById('k-previa-rvf-rs').innerText = (varF>=0?"+":"") + "R$ " + fmt(varF);
       document.getElementById('perc-previa-rvf-p').innerText = Math.round((real/f-1)*100) + "%";
@@ -339,53 +308,22 @@
     function renderPreviaContent() {
       let hT = "", hS = "";
       let totBg = 0, totFc = 0, totPr = 0;
-
       const lobsOrdenadosTabela = Object.entries(previaData.lobs).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
-
       lobsOrdenadosTabela.forEach(([code, [bg, fc, pr]]) => {
         totBg += bg; totFc += fc; totPr += pr;
         let vB = pr - bg, pB = bg > 0 ? Math.round((pr/bg-1)*100) : 0;
         let vF = pr - fc, pF = fc > 0 ? Math.round((pr/fc-1)*100) : 0;
-
-        hT += `<tr>
-          <td class="col-nome">${code} - ${lobLabels[code]}</td>
-          <td>${fmt(bg)}</td>
-          <td>${fmt(fc)}</td>
-          <td>${fmt(pr)}</td>
-          <td class="${vB<0?'neg':'pos'}">${fmt(vB)}</td>
-          <td class="${pB<0?'neg':'pos'}">${pB}%</td>
-          <td class="${vF<0?'neg':'pos'}">${fmt(vF)}</td>
-          <td class="pr-2 ${pF<0?'neg':'pos'}">${pF}%</td>
-        </tr>`;
+        hT += `<tr><td class="col-nome">${code} - ${lobLabels[code]}</td><td>${fmt(bg)}</td><td>${fmt(fc)}</td><td>${fmt(pr)}</td><td class="${vB<0?'neg':'pos'}">${fmt(vB)}</td><td class="${pB<0?'neg':'pos'}">${pB}%</td><td class="${vF<0?'neg':'pos'}">${fmt(vF)}</td><td class="pr-2 ${pF<0?'neg':'pos'}">${pF}%</td></tr>`;
       });
-
       const lobsOrdenadosShare = Object.entries(previaData.lobs).sort((a, b) => b[1][2] - a[1][2]);
-
       lobsOrdenadosShare.forEach(([code, [bg, fc, pr]]) => {
-        if (pr > 0) {
-          hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm">
-                  <div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code} - ${lobLabels[code]}</span></div>
-                  <div class="text-right font-black share-text-main">${(pr/previaData.total*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(pr)}</span></div>
-                </div>`;
-        }
+        if (pr > 0) hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code} - ${lobLabels[code]}</span></div><div class="text-right font-black share-text-main">${(pr/previaData.total*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(pr)}</span></div></div>`;
       });
-
       document.getElementById('b-previa-lob').innerHTML = hT;
       document.getElementById('b-share-previa').innerHTML = hS;
-
       let vTB = totPr - totBg, pTB = Math.round((totPr/totBg-1)*100);
       let vTF = totPr - totFc, pTF = Math.round((totPr/totFc-1)*100);
-
-      document.getElementById('f-previa-lob').innerHTML = `<tr>
-        <td class="text-left pl-4">TOTAL GERAL</td>
-        <td>${fmt(totBg)}</td>
-        <td>${fmt(totFc)}</td>
-        <td>${fmt(totPr)}</td>
-        <td class="${vTB<0?'text-red-400':'text-emerald-400'}">${fmt(vTB)}</td>
-        <td class="${pTB<0?'text-red-400':'text-emerald-400'}">${pTB}%</td>
-        <td class="${vTF<0?'text-red-400':'text-emerald-400'}">${fmt(vTF)}</td>
-        <td class="pr-2 ${pTF<0?'text-red-400':'text-emerald-400'}">${pTF}%</td>
-      </tr>`;
+      document.getElementById('f-previa-lob').innerHTML = `<tr><td class="text-left pl-4">TOTAL GERAL</td><td>${fmt(totBg)}</td><td>${fmt(totFc)}</td><td>${fmt(totPr)}</td><td class="${vTB<0?'text-red-400':'text-emerald-400'}">${fmt(vTB)}</td><td class="${pTB<0?'text-red-400':'text-emerald-400'}">${pTB}%</td><td class="${vTF<0?'text-red-400':'text-emerald-400'}">${fmt(vTF)}</td><td class="pr-2 ${pTF<0?'text-red-400':'text-emerald-400'}">${pTF}%</td></tr>`;
     }
 
     const nav = document.getElementById('nav-meses');
@@ -394,7 +332,6 @@
       b.className = "nav-btn"; b.innerText = m;
       b.onclick = () => switchMes(m, b);
       nav.appendChild(b);
-      // Inicia em FEV ou você pode mudar para MAR se já tiver os dados fechados
       if (m === "FEV") { b.classList.add('active'); switchMes("FEV", b); }
     });
   </script>
