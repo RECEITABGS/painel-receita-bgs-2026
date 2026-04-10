@@ -154,7 +154,7 @@
             <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
               <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Mês Ativo</p>
               <p id="previa-mes" class="text-xl font-black text-slate-900 leading-none">ABR</p>
-              <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">06/04/2026</p>
+              <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">10/04/2026</p>
             </div>
           </div>
     
@@ -183,7 +183,7 @@
 
   <script>
     const META_ANUAL = 368538930;
-    const fmt = (v) => (v === 0 || isNaN(v) || v === null) ? "-" : Math.round(v).toLocaleString('pt-BR');
+    const fmt = (v) => (v === 0 || isNaN(v) || v === null) ? "0" : Math.round(v).toLocaleString('pt-BR');
     const lobLabels = { "5020":"BANKNOTES", "5021":"PGM", "5022":"MINERAÇÃO", "5023":"ELETRÔNICOS", "5024":"C&D", "5025":"FARMA", "5029":"OUTROS", "5200":"ARMAZENAGEM", "6000":"JOIAS", "6220":"LUXO" };
 
     let currentView = 'receita';
@@ -212,23 +212,24 @@
       { g: "JULIANA SANTOS", o: "BRI", r: "DHL GLOBAL FORWARDING BRAZIL LTDA", s: "REVERSÃO", j: -197, f: 0, m: 0 }
     ];
 
+    // DADOS ATUALIZADOS CONFORME PRINT ENVIADO
     const previaData = {
         mes: "ABRIL",
-        data: "06/04/2026",
+        data: "10/04/2026",
         budget: 29476478,
         forecast: 29476478,
-        realizado: 554177,
+        realizado: 3264927,
         lobs: {
-            "5020": { b: 3865992, f: 3865992, r: 150765 },
-            "5021": { b: 2431920, f: 2431920, r: 0 },
-            "5022": { b: 13501404, f: 13501404, r: 352829 },
-            "5023": { b: 2903459, f: 2903459, r: 0 },
-            "5024": { b: 360426, f: 360426, r: 0 },
-            "5025": { b: 2531910, f: 2531910, r: 0 },
+            "5020": { b: 3865992, f: 3865992, r: 634830 },
+            "5021": { b: 2431920, f: 2431920, r: 428555 },
+            "5022": { b: 13501404, f: 13501404, r: 956012 },
+            "5023": { b: 2903459, f: 2903459, r: 420766 },
+            "5024": { b: 360426, f: 360426, r: 64550 },
+            "5025": { b: 2531910, f: 2531910, r: 454244 },
             "5029": { b: 26013, f: 26013, r: 0 },
             "5200": { b: 52938, f: 52938, r: 0 },
-            "6000": { b: 1777612, f: 1777612, r: 33236 },
-            "6220": { b: 2024805, f: 2024805, r: 17348 }
+            "6000": { b: 1777612, f: 1777612, r: 240548 },
+            "6220": { b: 2024805, f: 2024805, r: 65422 }
         }
     };
 
@@ -267,9 +268,9 @@
         Object.keys(d.lobs).sort().forEach(code => {
             const item = d.lobs[code];
             const vB = item.r - item.b;
-            const pB = Math.round((item.r / item.b - 1) * 100);
+            const pB = item.b > 0 ? Math.round((item.r / item.b - 1) * 100) : 0;
             const vF = item.r - item.f;
-            const pF = Math.round((item.r / item.f - 1) * 100);
+            const pF = item.f > 0 ? Math.round((item.r / item.f - 1) * 100) : 0;
 
             hL += `<tr><td class="col-nome">${code} - ${lobLabels[code]}</td><td>${fmt(item.b)}</td><td>${fmt(item.f)}</td><td>${fmt(item.r)}</td><td class="${vB < 0 ? 'neg' : 'pos'}">${fmt(vB)}</td><td class="${pB < 0 ? 'neg' : 'pos'}">${pB}%</td><td class="${vF < 0 ? 'neg' : 'pos'}">${fmt(vF)}</td><td class="pr-2 ${pF < 0 ? 'neg' : 'pos'}">${pF}%</td></tr>`;
 
