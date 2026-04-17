@@ -25,8 +25,6 @@
     .share-item { border-left: 3px solid #1e293b; padding:4px 6px; margin-bottom:2px; }
     .share-text-main { font-size:8px; line-height:1.1; }
     .text-slate-400 { color:#475569 !important; font-weight:600; }
-    
-    /* Ajuste específico para os contêineres de gráfico */
     .chart-box { position: relative; height: 160px; width: 100%; }
   </style>
 </head>
@@ -472,8 +470,25 @@
       b.className = "nav-btn"; b.innerText = m;
       b.onclick = () => switchMes(m, b);
       nav.appendChild(b);
-      if (m === "CONSOLIDADO") { b.classList.add('active'); switchMes("CONSOLIDADO", b); }
+      if (m === "CONSOLIDADO") { 
+        b.classList.add('active'); 
+        switchMes(m, b); 
+      }
     });
+
+    // --- INICIALIZAÇÃO AUTOMÁTICA (DIRECIONA PARA PRÉVIA EM ABRIL) ---
+    window.onload = function() {
+        const hoje = new Date();
+        const dia = hoje.getDate();
+        const mes = hoje.getMonth(); // 3 representa Abril (Index começa em 0)
+
+        // Se estivermos em Abril e entre os dias 15 e 20 (Período de Prévia)
+        if (mes === 3 && dia >= 15 && dia <= 20) {
+            showView('previa');
+        } else {
+            showView('receita');
+        }
+    };
   </script>
 </body>
 </html>
