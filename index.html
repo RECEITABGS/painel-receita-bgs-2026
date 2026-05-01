@@ -42,6 +42,7 @@
       <span class="text-[#00529B] font-black text-xl italic tracking-tighter">BRINK'S</span>
     </header>
 
+    <!-- View Receita Mensal -->
     <div id="view-receita" class="flex flex-col gap-2 flex-1 min-h-0">
       <div class="grid grid-cols-5 gap-2 h-16 shrink-0">
         <div class="bg-white rounded-xl p-2 border border-slate-200 border-t-4 border-t-slate-800 shadow-sm flex flex-col justify-center">
@@ -104,6 +105,7 @@
       </div>
     </div>
 
+    <!-- View Performance Trimestral -->
     <div id="view-q1" class="hidden flex flex-col gap-2 flex-1 min-h-0">
         <div class="flex gap-1 shrink-0">
             <button class="nav-btn active q-nav" onclick="switchQuarter('Q1', this)">Q1 (JAN-MAR)</button>
@@ -148,6 +150,7 @@
         </div>
     </div>
 
+    <!-- View PDD -->
     <div id="view-pdd" class="bg-white rounded-xl border border-slate-200 flex flex-col flex-1 min-h-0 overflow-hidden hidden shadow-sm">
       <div class="section-header py-3 tracking-widest text-sm">Monitoramento PDD</div>
       <div class="table-container overflow-y-auto">
@@ -168,6 +171,7 @@
       </div>
     </div>
 
+    <!-- View Prévia (ATUALIZADA) -->
     <div id="view-previa" class="hidden flex flex-col gap-3 flex-1 min-h-0">
         <div class="grid grid-cols-4 gap-2 min-h-[105px] shrink-0">
             <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
@@ -201,13 +205,13 @@
             <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex flex-col justify-center border-t-4 border-t-slate-800">
               <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Mês Ativo</p>
               <p id="previa-mes" class="text-xl font-black text-slate-900 leading-none">ABR</p>
-              <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">17/04/2026</p>
+              <p id="previa-data" class="text-[10px] font-bold text-slate-400 mt-1">30/04/2026</p>
             </div>
         </div>
      
         <div class="grid grid-cols-12 gap-2 flex-1 min-h-0">
             <div class="col-span-9 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
-              <div class="section-header">PRÉVIA POR LOB</div>
+              <div class="section-header">PRÉVIA POR LOB (VALORES REAIS)</div>
               <div class="table-container">
                 <table>
                   <thead>
@@ -231,7 +235,20 @@
   <script>
     const META_ANUAL = 368538930;
     const fmt = (v) => (v === 0 || isNaN(v) || v === null) ? "0" : Math.round(v).toLocaleString('pt-BR');
-    const lobLabels = { "5020":"BANKNOTES", "5021":"PGM", "5022":"MINERAÇÃO", "5023":"ELETRÔNICOS", "5024":"C&D", "5025":"FARMA", "5029":"OUTROS", "5200":"ARMAZENAGEM", "6000":"JOIAS", "6220":"LUXO" };
+    
+    // Nomes das LOBs atualizados conforme o print
+    const lobLabels = { 
+        "5020":"Corretoras, bancos BGS e Paraguai (exp/imp)", 
+        "5021":"D&J, PGM, ouro e demais imp/exp de metais preciosos", 
+        "5022":"Mineração de ouro e diamante", 
+        "5023":"Eletrônicos", 
+        "5024":"Cartões de crédito, hologramas (exp/imp)", 
+        "5025":"Farma", 
+        "5029":"Agro, Affiliates", 
+        "5200":"Armazenamento de Bens e Produtos", 
+        "6000":"Transporte de Diamantes e Joias", 
+        "6220":"Luxury Goods" 
+    };
 
     let currentView = 'receita';
     let charts = {};
@@ -254,23 +271,24 @@
       { g: "JULIANA SANTOS", o: "BRI", r: "DHL GLOBAL FORWARDING BRAZIL LTDA", s: "REVERSÃO", j: -197, f: 0, m: 0 }
     ];
 
+    // --- PRÉVIA ATUALIZADA COM VALORES REAIS DO PRINT ---
     const previaData = {
         mes: "ABRIL",
-        data: "17/04/2026",
+        data: "30/04/2026",
         budget: 29476478,
         forecast: 30476478,
-        realizado: 10577044,
+        realizado: 27392662, // Total geral do print
         lobs: {
-            "5020": { b: 3865992, f: 3865992, r: 1457668 },
-            "5021": { b: 2431920, f: 2431920, r: 921003 },
-            "5022": { b: 13501404, f: 14201404, r: 5592619 },
-            "5023": { b: 2903459, f: 3203459, r: 1030854 },
-            "5024": { b: 360426, f: 360426, r: 93802 },
-            "5025": { b: 2531910, f: 2531910, r: 616210 },
-            "5029": { b: 26013, f: 26013, r: 0 },
-            "5200": { b: 52938, f: 52938, r: 0 },
-            "6000": { b: 1777612, f: 1777612, r: 398513 },
-            "6220": { b: 2024805, f: 2024805, r: 466374 }
+            "5020": { b: 3865992,  f: 3865992,  r: 3854284 },
+            "5021": { b: 2431920,  f: 2431920,  r: 2233390 },
+            "5022": { b: 13501404, f: 14201404, r: 14180584 },
+            "5023": { b: 2903459,  f: 3203459,  r: 2995962 },
+            "5024": { b: 360426,   f: 360426,   r: 426281  },
+            "5025": { b: 2531910,  f: 2531910,  r: 1484305 },
+            "5029": { b: 26013,    f: 26013,    r: 17441   },
+            "5200": { b: 52938,    f: 52938,    r: 0       },
+            "6000": { b: 1777612,  f: 1777612,  r: 1221098 },
+            "6220": { b: 2024805,  f: 2024805,  r: 979316  }
         }
     };
 
@@ -288,10 +306,12 @@
     function renderPrevia() {
         const d = previaData;
         let hL = "", hS = "";
-        const varBudRS = d.realizado - d.budget;
-        const varBudP = (d.realizado / d.budget * 100 - 100).toFixed(1);
-        const varFcstRS = d.realizado - d.forecast;
-        const varFcstP = (d.realizado / d.forecast * 100 - 100).toFixed(1);
+        
+        // Cálculos globais conforme rodapé do print
+        const varBudRS = d.realizado - d.budget; // -2.083.816
+        const varBudP = Math.round((d.realizado / d.budget - 1) * 100); // -7%
+        const varFcstRS = d.realizado - d.forecast; // -3.083.816
+        const varFcstP = Math.round((d.realizado / d.forecast - 1) * 100); // -10%
 
         document.getElementById('k-previa-real').innerText = "R$ " + fmt(d.realizado);
         document.getElementById('k-previa-rvb-rs').innerText = "R$ " + fmt(varBudRS);
@@ -320,7 +340,7 @@
 
         sortedLobs.forEach(([code, item]) => {
             if (item.r > 0) {
-                hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code} - ${lobLabels[code]}</span></div><div class="text-right font-black share-text-main">${(item.r / d.realizado * 100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(item.r)}</span></div></div>`;
+                hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code}</span></div><div class="text-right font-black share-text-main">${(item.r / d.realizado * 100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(item.r)}</span></div></div>`;
             }
         });
 
@@ -337,9 +357,8 @@
         document.getElementById('chart-var-title').innerText = `Variação R$ por LOB (${q})`;
         document.getElementById('chart-trend-title').innerText = `Tendência Mensal do Trimestre (${q})`;
         
-        if(q === 'Q1') {
-            renderQ1();
-        } else {
+        if(q === 'Q1') { renderQ1(); } 
+        else {
             const empty = `<tr><td colspan="5" class="py-20 text-center opacity-40 font-black uppercase text-[9px]">Aguardando dados de fechamento para ${q}</td></tr>`;
             document.getElementById('b-q1').innerHTML = empty;
             document.getElementById('f-q1').innerHTML = "";
@@ -352,17 +371,15 @@
         const q1_2026 = db.CONSOLIDADO.lobs;
         let html = "", t25 = 0, t26 = 0;
         let labels = [], dataVar = [];
-
         Object.keys(lobLabels).forEach(code => {
             const v25 = q1_2025[code] || 0;
             const v26 = q1_2026[code][0] || 0;
             const diff = v26 - v25;
             const perc = v25 > 0 ? (v26/v25-1)*100 : 0;
             t25 += v25; t26 += v26;
-            labels.push(lobLabels[code]);
+            labels.push(code); // Usando apenas o código no gráfico para não poluir
             dataVar.push(diff);
-
-            html += `<tr><td class="col-nome">${code} - ${lobLabels[code]}</td><td>R$ ${fmt(v25)}</td><td>R$ ${fmt(v26)}</td><td class="${diff < 0 ? 'neg' : 'pos'}">${fmt(diff)}</td><td class="pr-2 ${perc < 0 ? 'neg' : 'pos'}">${perc.toFixed(1)}%</td></tr>`;
+            html += `<tr><td class="col-nome">${code} - ${lobLabels[code].substring(0,30)}...</td><td>R$ ${fmt(v25)}</td><td>R$ ${fmt(v26)}</td><td class="${diff < 0 ? 'neg' : 'pos'}">${fmt(diff)}</td><td class="pr-2 ${perc < 0 ? 'neg' : 'pos'}">${perc.toFixed(1)}%</td></tr>`;
         });
         document.getElementById('b-q1').innerHTML = html;
         document.getElementById('f-q1').innerHTML = `<tr><td class="text-left pl-4">TOTAL Q1</td><td>${fmt(t25)}</td><td>${fmt(t26)}</td><td>${fmt(t26-t25)}</td><td class="pr-2">${((t26/t25-1)*100).toFixed(1)}%</td></tr>`;
@@ -372,19 +389,12 @@
     function initChartsQ1(labels, dataVar) {
         if (charts.var) charts.var.destroy();
         if (charts.trend) charts.trend.destroy();
-        
         const ctxVar = document.getElementById('chartQ1Var').getContext('2d');
         charts.var = new Chart(ctxVar, {
             type: 'bar',
             data: { labels: labels, datasets: [{ data: dataVar, backgroundColor: dataVar.map(v => v < 0 ? '#ef4444' : '#10b981'), borderRadius: 4 }] },
-            options: { 
-                indexAxis: 'y', 
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } }, 
-                scales: { x: { display: false }, y: { ticks: { font: { size: 7, weight: '800' } } } } 
-            }
+            options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { font: { size: 7, weight: '800' } } } } }
         });
-
         const ctxTrend = document.getElementById('chartQ1Trend').getContext('2d');
         charts.trend = new Chart(ctxTrend, {
             type: 'line',
@@ -392,11 +402,7 @@
                 { label: '2025', data: [26931211, 23993005, 26275730], borderColor: '#cbd5e1', tension: 0.4 },
                 { label: '2026', data: [db.JAN.real, db.FEV.real, db.MAR.real], borderColor: '#1e293b', borderWidth: 3, tension: 0.4 }
             ]},
-            options: { 
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { font: { size: 8, weight: '800' } } } }, 
-                scales: { y: { display: false }, x: { ticks: { font: { size: 8 } } } } 
-            }
+            options: { maintainAspectRatio: false, plugins: { legend: { labels: { font: { size: 8, weight: '800' } } } }, scales: { y: { display: false }, x: { ticks: { font: { size: 8 } } } } }
         });
     }
 
@@ -424,10 +430,10 @@
       Object.keys(d.lobs).sort().forEach(code => {
         const [r, f] = d.lobs[code];
         let v = r - f, p = f > 0 ? Math.round((r / f - 1) * 100) : 0;
-        hL += `<tr><td class="col-nome">${code} - ${lobLabels[code]}</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
+        hL += `<tr><td class="col-nome">${code} - ${lobLabels[code].substring(0,35)}...</td><td>${fmt(r)}</td><td>${fmt(f)}</td><td class="${v<0?'neg':'pos'}">${fmt(v)}</td><td class="pr-2 ${p<0?'neg':'pos'}">${p}%</td></tr>`;
       });
       Object.entries(d.lobs).sort((a,b)=>b[1][0]-a[1][0]).forEach(([code,[r]])=>{
-        if (r>0) hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code} - ${lobLabels[code]}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(r)}</span></div></div>`;
+        if (r>0) hS += `<div class="bg-white share-item flex justify-between items-center rounded shadow-sm"><div class="share-text-main font-black uppercase text-slate-400">LOB<br><span class="text-slate-900">${code}</span></div><div class="text-right font-black share-text-main">${(r/d.real*100).toFixed(1)}%<br><span class="text-[6px] text-slate-400 italic font-medium">R$ ${fmt(r)}</span></div></div>`;
       });
       Object.entries(d.clientes).sort((a,b)=>b[1][0]-a[1][0]).forEach(([n,[r,f]])=>{
         let v=r-f, p=f>0 ? Math.round((r/f-1)*100) : 0;
@@ -454,11 +460,9 @@
       const ids = ['view-receita','view-pdd','view-previa','view-q1'];
       ids.forEach(id => document.getElementById(id).classList.add('hidden'));
       document.getElementById('view-'+view).classList.remove('hidden');
-      
       if(view==='pdd') renderPDD();
       if(view==='previa') renderPrevia();
       if(view==='q1') switchQuarter('Q1', document.querySelector('.q-nav'));
-      
       currentView = view;
     }
 
@@ -470,25 +474,8 @@
       b.className = "nav-btn"; b.innerText = m;
       b.onclick = () => switchMes(m, b);
       nav.appendChild(b);
-      if (m === "CONSOLIDADO") { 
-        b.classList.add('active'); 
-        switchMes(m, b); 
-      }
+      if (m === "CONSOLIDADO") { b.classList.add('active'); switchMes(m, b); }
     });
-
-    // --- INICIALIZAÇÃO AUTOMÁTICA (DIRECIONA PARA PRÉVIA EM ABRIL) ---
-    window.onload = function() {
-        const hoje = new Date();
-        const dia = hoje.getDate();
-        const mes = hoje.getMonth(); // 3 representa Abril (Index começa em 0)
-
-        // Se estivermos em Abril e entre os dias 15 e 20 (Período de Prévia)
-        if (mes === 3 && dia >= 15 && dia <= 20) {
-            showView('previa');
-        } else {
-            showView('receita');
-        }
-    };
   </script>
 </body>
 </html>
